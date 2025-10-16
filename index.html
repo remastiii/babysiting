@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mali Anđeli – Bebisitovanje</title>
+  <style>
+    /* --- Reset i osnovni stilovi --- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #fdf6f0;
+    }
+
+    header {
+      background: linear-gradient(120deg, #ffdfd3, #ffeccc);
+      padding: 1.5rem 2rem;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: #d35400;
+    }
+
+    nav {
+      background-color: #fff;
+      padding: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    nav ul {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      flex-wrap: wrap;
+    }
+
+    nav li {
+      margin: 0 1rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #d35400;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #e67e22;
+    }
+
+    section {
+      padding: 3rem 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      color: #d35400;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      font-size: 2rem;
+    }
+
+    .intro {
+      text-align: center;
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+
+    .services, .pricing {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+
+    .service-item, .price-item {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px dashed #eee;
+    }
+
+    .price-item:last-child {
+      border-bottom: none;
+    }
+
+    .price-item h3 {
+      color: #e67e22;
+    }
+
+    .price-item p {
+      margin-top: 0.3rem;
+    }
+
+    .contact-form {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-weight: 600;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    .btn {
+      background-color: #d35400;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #e67e22;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: #333;
+      color: white;
+      margin-top: 2rem;
+    }
+
+    /* --- Mobilna prilagodljivost --- */
+    @media (max-width: 600px) {
+      nav ul {
+        flex-direction: column;
+        align-items: center;
+      }
+      nav li {
+        margin: 0.5rem 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">Mali Anđeli</div>
+    <p>Pouzdano i ljubazno bebisitovanje u srcu Beograda</p>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="#o-nama">O nama</a></li>
+      <li><a href="#usluge">Usluge</a></li>
+      <li><a href="#cenovnik">Cenovnik</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <section class="intro" id="pocetna">
+      <h1>Dobrodošli u Mali Anđeli!</h1>
+      <p>Brinemo o vašoj deci kao da su naša – sa ljubavlju, strpljenjem i profesionalnošću.</p>
+    </section>
+
+    <section class="services" id="o-nama">
+      <h2>O nama</h2>
+      <p>Zovem se Marko i posvećujem se bebisitovanju već preko 5 godina. Moj tim je sastavljen od iskusnih i proverenih osoba koje imaju sva potrebna obaveštenja i ljubav prema deci.</p>
+      <p>Svi naši bebisiteri imaju:</p>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+        <li>✅ Pozadinu u radu s decom</li>
+        <li>✅ Referencu i proveru ličnosti</li>
+        <li>✅ Prvu pomoć i osnovno znanje o bezbednosti</li>
+      </ul>
+    </section>
+
+    <section class="services" id="usluge">
+      <h2>Naše usluge</h2>
+      <div class="service-item">
+        <h3>Redovno bebisitovanje</h3>
+        <p>Idealan izbor za radne roditelje – svakodnevna nega tokom radnog vremena.</p>
+      </div>
+      <div class="service-item">
+        <h3>Prigodno bebisitovanje</h3>
+        <p>Za izlaske, putovanja ili hitne situacije – dostupni smo i vikendom!</p>
+      </div>
+      <div class="service-item">
+        <h3>Noćno bebisitovanje</h3>
+        <p>Pomoć tokom noći za roditelje novorođenčadi (od 0 do 12 meseci).</p>
+      </div>
+    </section>
+
+    <section class="pricing" id="cenovnik">
+      <h2>Cenovnik</h2>
+      <div class="price-item">
+        <h3>Do 3 godine</h3>
+        <p><strong>800 RSD / sat</strong></p>
+      </div>
+      <div class="price-item">
+        <h3>3–6 godina</h3>
+        <p><strong>700 RSD / sat</strong></p>
+      </div>
+      <div class="price-item">
+        <h3>Višednevna pakovanja</h3>
+        <p><strong>Popust 10% za redovne korisnike</strong></p>
+      </div>
+      <p style="text-align: center; margin-top: 1rem; font-style: italic;">
+        Cene uključuju sve – bez skrivenih troškova!
+      </p>
+    </section>
+
+    <section class="contact-form" id="kontakt">
+      <h2>Kontaktirajte nas</h2>
+      <form id="contactForm">
+        <div class="form-group">
+          <label for="ime">Ime i prezime</label>
+          <input type="text" id="ime" required>
+        </div>
+        <div class="form-group">
+          <label for="telefon">Telefon</label>
+          <input type="tel" id="telefon" required>
+        </div>
+        <div class="form-group">
+          <label for="poruka">Poruka (datum, vreme, broj dece...)</label>
+          <textarea id="poruka" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn">Pošalji zahtev</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Mali Anđeli – Bebisitovanje. Sva prava zadržana.</p>
+    <p>Beograd, Srbija | ☎️ +381 60 XXX XXXX</p>
+  </footer>
+
+  <script>
+    // Jednostavna obrada forme (možeš kasnije povezati sa email ili backend-om)
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Hvala na poruci! Uskoro ćemo vas kontaktirati.');
+      this.reset();
+    });
+
+    // Glavni meni – skrol do sekcije
+    document.querySelectorAll('nav a').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetSection = document.querySelector(targetId);
+        window.scrollTo({
+          top: targetSection.offsetTop - 70,
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
