@@ -241,23 +241,23 @@
     </section>
 
     <section class="contact-form" id="kontakt">
-      <h2>Kontaktirajte nas</h2>
-      <form id="contactForm">
-        <div class="form-group">
-          <label for="ime">Ime i prezime</label>
-          <input type="text" id="ime" required>
-        </div>
-        <div class="form-group">
-          <label for="telefon">Telefon</label>
-          <input type="tel" id="telefon" required>
-        </div>
-        <div class="form-group">
-          <label for="poruka">Poruka (datum, vreme, broj dece...)</label>
-          <textarea id="poruka" rows="4" required></textarea>
-        </div>
-        <button type="submit" class="btn">Pošalji zahtev</button>
-      </form>
-    </section>
+  <h2>Kontaktirajte nas</h2>
+  <form action="https://formspree.io/f/mrbyrdrj" method="POST">
+    <div class="form-group">
+      <label for="ime">Ime i prezime</label>
+      <input type="text" name="ime" id="ime" required>
+    </div>
+    <div class="form-group">
+      <label for="email">Email ili telefon</label>
+      <input type="text" name="kontakt" id="kontakt" required>
+    </div>
+    <div class="form-group">
+      <label for="poruka">Poruka (datum, vreme, broj dece...)</label>
+      <textarea name="poruka" id="poruka" rows="4" required></textarea>
+    </div>
+    <button type="submit" class="btn">Pošalji zahtev</button>
+  </form>
+</section>
   </main>
 
   <footer>
