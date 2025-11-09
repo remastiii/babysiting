@@ -94,4 +94,39 @@
         });
       });
     });
+      
+  
+    document.addEventListener('DOMContentLoaded', () => {
+      const menuToggle = document.querySelector('.menu-toggle');
+      const navMenu = document.querySelector('.nav-menu');
+
+      menuToggle.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+      });
+    });
+  document.addEventListener('DOMContentLoaded', () => {
+    const sections = document.querySelectorAll('.animated-section');
+
+    const observerOptions = {
+      root: null, // viewport
+      rootMargin: '0px 0px -100px 0px', // pokreni animaciju ranije (kada je 100px do dna)
+      threshold: 0.1 // 10% elementa mora biti u vidnom polju
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in');
+        } else {
+          // Ukloni klasu kad izađe iz vidljivosti – omogućava ponavljanje
+          entry.target.classList.remove('animate-in');
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+  });
+
   
