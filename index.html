@@ -16,12 +16,19 @@
 </head>
 <body>
   <!-- JEDINSTVENI HEADER SA LOGO I MENIJEM -->
-  <header>
-    <a href="#" class="logo">
-      <span class="logo-icon">👶</span>
-      BabyGuard
-    </a>
-    <nav>
+    <header class="mobile-header">
+    <div class="logo-container">
+      <a href="#" class="logo-link">
+        <span class="logo-icon">👶</span>
+        <span class="logo-text">BabyGuard</span>
+      </a>
+    </div>
+    <button class="menu-toggle animated-section" aria-label="Toggle menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+    <nav class="nav-menu">
       <ul>
         <li><a href="#o-nama">O nama</a></li>
         <li><a href="#konsultacije">Konsultacije</a></li>
@@ -33,20 +40,54 @@
   </header>
 
   <main>
-    <section class="intro card" id="pocetna">
-      <h1>Dobro dosli
-      </h1>
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Dobrodošli u BabyGuard</h1>
+        <p>Brinemo o vašoj deci kao da su naša – sa ljubavlju, strpljenjem i profesionalnošću.</p>
+      </div>
+    </section> 
+    
+    <section class="intro card animated-section" id="pocetna">
+      <h1>Vaša deca su naša briga</h1>
       <p>Brinemo o vašoj deci kao da su naša – sa ljubavlju, strpljenjem i profesionalnošću.</p>
     </section>
-
-    <section class="card" id="konsultacije">
-      <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
-        <!-- Calendly inline widget begin -->
-        <div class="calendly-inline-widget" data-url="https://calendly.com/1markobogdan1/30min" style="min-width:320px;height:700px;"></div>
+    <!--
+      <section class="card" id="konsultacije">
         <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
-        <!-- Calendly inline widget end -->
+          
+          <div class="calendly-inline-widget" data-url="https://calendly.com/1markobogdan1/30min" style="min-width:320px;height:700px;"></div>
+          <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+          
+      </section>
+    
+    -->
+      <section class="about-cards-section animated-section">
+        <div class="about-card">
+          <div class="about-card-icon">
+            <img src="https://via.placeholder.com/64" alt="Iskustvo">
+          </div>
+          <h3>Iskusni bebisiteri</h3>
+          <p>Svi naši bebisiteri imaju više od 5 godina iskustva u brizi o deci. Prošli su strogu selekciju, proveru ličnosti i obuku iz prve pomoći i bezbednosti dece.</p>
+        </div>
+
+        <div class="about-card">
+          <div class="about-card-icon">
+            <img src="https://via.placeholder.com/64" alt="Bezbednost">
+          </div>
+          <h3>Bezbednost na prvom mestu</h3>
+          <p>Svaki bebisiter poseduje osnovna znanja iz prve pomoći, zna kako da reaguje u hitnim situacijama i obezbeđuje sigurno okruženje za vaše dete.</p>
+        </div>
+
+        <div class="about-card">
+          <div class="about-card-icon">
+            <img src="https://via.placeholder.com/64" alt="Individualan pristup">
+          </div>
+          <h3>Individualni pristup</h3>
+          <p>Naš tim je sastavljen od ljudi koji vole decu i posvećuju se njihovom blagostanju. Svakom detetu pristupamo individualno, sa pažnjom, strpljenjem i razumevanjem.</p>
+        </div>
     </section>
-    <section class="card" id="o-nama">
+    
+    <section class="card animated-section" id="o-nama">
       <h2>O nama</h2>
       <p>Zovem se Marko i posvećujem se bebisitovanju već preko 5 godina. Moj tim je sastavljen od iskusnih i proverenih osoba koje imaju sva potrebna obaveštenja i ljubav prema deci.</p>
       <p>Svi naši bebisiteri imaju:</p>
@@ -57,7 +98,7 @@
       </ul>
     </section>
 
-    <section class="card" id="usluge">
+    <section class="card animated-section" id="usluge">
       <h2>Naše usluge</h2>
       <div class="service-item">
         <h3>Redovno bebisitovanje</h3>
@@ -73,7 +114,7 @@
       </div>
     </section>
 
-    <section class="card" id="cenovnik">
+    <section class="card animated-section" id="cenovnik">
       <h2>Cenovnik</h2>
       <div class="price-item">
         <h3>Do 3 godine</h3>
@@ -92,7 +133,7 @@
       </p>
     </section>
 
-    <section class="card" id="kontakt">
+    <section class="card animated-section" id="kontakt">
       <h2>Kontaktirajte nas</h2>
       <form id="contactForm">
         <input type="text" name="_gotcha" style="display:none !important;" tabindex="-1" autocomplete="off">
@@ -132,6 +173,20 @@
   <footer>
     <p>&copy; 2025 Mali Anđeli – Bebisitovanje. Sva prava zadržana.</p>
     <p>Beograd, Srbija | ☎️ +381 60 XXX XXXX</p>
+    <div class="social-icons">
+      <a href="https://www.facebook.com" target="_blank" aria-label="Facebook">
+        <span class="social-icon">📘</span>
+      </a>
+      <a href="https://www.instagram.com" target="_blank" aria-label="Instagram">
+        <span class="social-icon">📷</span>
+      </a>
+      <a href="https://www.tiktok.com" target="_blank" aria-label="TikTok">
+        <span class="social-icon">🎬</span>
+      </a>
+      <a href="https://www.whatsapp.com" target="_blank" aria-label="WhatsApp">
+        <span class="social-icon">💬</span>
+      </a>
+    </div>
   </footer>
 
   <script src="script.js"></script>
