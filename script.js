@@ -1,5 +1,4 @@
 
-    
     // Animacija prilikom skrolovanja
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -102,8 +101,10 @@
 
       menuToggle.addEventListener('click', () => {
         navMenu.classList.toggle('active');
+        menuToggle.classList.toggle('active'); // ← ovo pravi X
       });
     });
+
   document.addEventListener('DOMContentLoaded', () => {
     const sections = document.querySelectorAll('.animated-section');
 
@@ -129,4 +130,35 @@
     });
   });
 
+  /*
+  // Funkcija koja osvežava koja je sekcija trenutno "aktivna"
+  function osveziAktivnuSekciju() {
+    const sekcije = document.querySelectorAll('.scroll-sekcija');
+    let aktivna = null;
+    let najblizaRazlika = Infinity;
+
+    sekcije.forEach(sekcija => {
+      sekcija.classList.remove('aktivna-sekcija');
+      const sredinaSekcije = sekcija.offsetTop + sekcija.offsetHeight / 2;
+      const sredinaProzora = window.scrollY + window.innerHeight / 2;
+      const razlika = Math.abs(sredinaProzora - sredinaSekcije);
+
+      if (razlika < najblizaRazlika) {
+        najblizaRazlika = razlika;
+        aktivna = sekcija;
+      }
+    });
+
+    if (aktivna) {
+      aktivna.classList.add('aktivna-sekcija');
+    }
+  }
+
+  // Pokreni pri svakom skrolu
+  window.addEventListener('scroll', osveziAktivnuSekciju);
+
+  // Pokreni odmah na učitavanju stranice
+  window.addEventListener('load', osveziAktivnuSekciju);
+
+*/
   
