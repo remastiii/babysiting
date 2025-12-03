@@ -32,11 +32,11 @@ header.mobile-header {
   justify-content: space-between;
   align-items: center;
   z-index: 1000;
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(12px);
   background: rgba(255, 255, 255, 0.50);
   border-bottom: 1px solid rgba(255, 255, 255, 0.65);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
 }
 
 .menu-toggle {
@@ -350,18 +350,18 @@ footer {
 
 .social-icon {
   display: inline-block;
-  width: 36px;
-  height: 36px;
-  line-height: 36px;
-  border-radius: 50%;
-  background-color: #e0e0e0;
+  width: 45px;
+  height: 45px;
+  line-height: 38px;
+  border-radius: 100%;
   margin: 0 5px;
   font-size: 18px;
   transition: background-color 0.3s ease;
 }
 
 .social-icon:hover {
-  background-color: #d0d0d0;
+  background-color: #e74d3c63
+;
 }
 .logo {
   font-size:36px;
@@ -475,6 +475,7 @@ footer {
     display: flex;
     justify-content: center;
     gap: 10px;
+    margin-bottom: 50px;
   }
   .social-icon {
     margin: 0;
@@ -488,6 +489,9 @@ footer {
 
   .intro h1 {
     font-size: 2rem;
+  }
+  h2 {
+    font-size: 1.8rem;
   }
   .hero-content h1 {
     font-size: 40px;
