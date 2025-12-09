@@ -19,69 +19,64 @@
     type="text/javascript">window.onload = function () { Calendly.initBadgeWidget({ url: 'https://calendly.com/1markobogdan1', text: 'Zakazite sastanak besplatno!', color: '#e74c3c', textColor: '#ffffff', branding: false }); }</script>
   <!-- Calendly badge widget end -->
   <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "name": "BabyGuard",
-      "image": "https://babyguard.rs/babyguardmix.png",
-      "@id": "https://babyguard.rs",
-      "url": "https://babyguard.rs",
-      "telephone": "+381613166770",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Zvezdara",
-        "addressLocality": "Beograd",
-        "postalCode": "11000",
-        "addressCountry": "RS"
+{
+  "@context": "https://schema.org",
+  "@type": "ChildCare",
+  "name": "BabyGuard",
+  "image": "https://babyguard.rs/babyguardmix.png",
+  "@id": "https://babyguard.rs",
+  "url": "https://babyguard.rs",
+  "telephone": "+381613166770",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Zvezdara",
+    "addressLocality": "Beograd",
+    "postalCode": "11000",
+    "addressCountry": "RS"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 44.8172,
+    "longitude": 20.4639
+  },
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": [
+      "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+    ],
+    "opens": "00:00",
+    "closes": "23:59"
+  },
+  "priceRange": "€20 - €30",
+  "description": "Profesionalno i hitno bebisitovanje u Beogradu – 24 sata dnevno, po pozivu, u roku od 1 sata.",
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Usluge bebisitovanja",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Hitno bebisitovanje",
+          "description": "Dostupno 24/7, dolazak u roku od 1 sata"
+        },
+        "price": "25",
+        "priceCurrency": "EUR"
       },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": 44.8172,
-        "longitude": 20.4639
-      },
-      "openingHoursSpecification": {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-          "Sunday"
-        ],
-        "opens": "00:00",
-        "closes": "23:59"
-      },
-      "priceRange": "€20 - €30",
-      "servesCuisine": null,
-      "description": "Profesionalno i hitno bebisitovanje u Beogradu – 24 sata dnevno, po pozivu, u roku od 1 sata.",
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "Usluge bebisitovanja",
-        "itemListElement": [
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Hitno bebisitovanje"
-            },
-            "price": "25",
-            "priceCurrency": "EUR"
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Bebisitovanje na putovanjima"
-            },
-            "price": "30",
-            "priceCurrency": "EUR"
-          }
-        ]
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Bebisitovanje na putovanjima",
+          "description": "Pratnja porodice na putovanjima unutar Srbije"
+        },
+        "price": "30",
+        "priceCurrency": "EUR"
       }
-    }
-      </script>
+    ]
+  }
+}
+</script>
 </head>
 
 <body>
@@ -393,6 +388,7 @@
       </a>
     </div>
   </footer>
+
 
 
 
