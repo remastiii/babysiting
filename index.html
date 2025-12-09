@@ -5,7 +5,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="google-site-verification" content="k7JnKfNjsCe2EnQ_4XVZUlhss-hvtqCQmMnoZn_MUG4" />
-  <title>BabyGuard – Bebisitovanje</title>
+  <title>BabyGuard – čuvanje dece</title>
+  <meta name="description" content="BabyGuard – profesionalno čuvanje dece i babysitting servis.">
   <link rel="icon" type="image/png" href="/favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="/sajt q/favicon_io/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
@@ -17,6 +18,70 @@
   <script
     type="text/javascript">window.onload = function () { Calendly.initBadgeWidget({ url: 'https://calendly.com/1markobogdan1', text: 'Zakazite sastanak besplatno!', color: '#e74c3c', textColor: '#ffffff', branding: false }); }</script>
   <!-- Calendly badge widget end -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "BabyGuard",
+      "image": "https://babyguard.rs/babyguardmix.png",
+      "@id": "https://babyguard.rs",
+      "url": "https://babyguard.rs",
+      "telephone": "+381613166770",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Zvezdara",
+        "addressLocality": "Beograd",
+        "postalCode": "11000",
+        "addressCountry": "RS"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 44.8172,
+        "longitude": 20.4639
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ],
+        "opens": "00:00",
+        "closes": "23:59"
+      },
+      "priceRange": "€20 - €30",
+      "servesCuisine": null,
+      "description": "Profesionalno i hitno bebisitovanje u Beogradu – 24 sata dnevno, po pozivu, u roku od 1 sata.",
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Usluge bebisitovanja",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Hitno bebisitovanje"
+            },
+            "price": "25",
+            "priceCurrency": "EUR"
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Bebisitovanje na putovanjima"
+            },
+            "price": "30",
+            "priceCurrency": "EUR"
+          }
+        ]
+      }
+    }
+      </script>
 </head>
 
 <body>
@@ -51,7 +116,11 @@
       <div class="hero-content">
         <h1>Dobrodošli u BabyGuard</h1>
         <p>Brinemo o vašoj deci kao da su naša – sa ljubavlju, strpljenjem i profesionalnošću.</p>
-        <button type="submit" class="btn">Pošalji zahtev</button>
+        <div class="hero-buttons">
+          <button onclick="location.href='#kontakt'" class="btn">Pošalji zahtev</button>
+          <button onclick="location.href='#usluge'" class="btn-orange-fill">Nase usluge</button>
+        </div>
+
       </div>
     </section>
 
@@ -235,6 +304,7 @@
           * Obavezna polja – morate uneti <strong>email ILI telefon</strong>.
         </p>
         <button type="submit" class="btn">Pošalji zahtev</button>
+
       </form>
     </section>
   </main>
@@ -331,5 +401,3 @@
 </body>
 
 </html>
-
-
