@@ -653,7 +653,7 @@ footer {
   opacity: 1;
   transform: translateY(0);
 }
-@media (max-width: 500px) {
+@media (max-width: 768px) {
   /* iPhone 12, 13, 14 */
       .hero-content h1 {
         font-size: 24px;
@@ -679,3 +679,4 @@ footer {
       font-size: 10px;
     }
 }
+
