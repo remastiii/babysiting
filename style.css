@@ -101,7 +101,7 @@ header.mobile-header {
 .hero {
   margin-top: 40px;
   height: 70vh;
-  background-image: url('/hero-site.webp');
+  background-image: url('hero-site.webp');
   background-size: cover;
   background-position: center;
   display: flex;
@@ -508,7 +508,6 @@ footer {
 .faq-section h2 {
   text-align: center;
   margin-bottom: 30px;
-  color: #333;
 }
 .faq-item details {
   margin-bottom: 15px;
@@ -654,13 +653,29 @@ footer {
   opacity: 1;
   transform: translateY(0);
 }
-@media (max-width: 390px) {
+@media (max-width: 500px) {
   /* iPhone 12, 13, 14 */
       .hero-content h1 {
-        font-size: 30px;
-        margin-top: 40px;
+        font-size: 24px;
+        margin-top: 10px;
     }
     .hero-content p {
-      font-size:18px;
+      font-size:14px;
+    }
+}
+@media (max-width: 321px) {
+  /* iPhone 12, 13, 14 */
+      .hero-content h1 {
+        font-size: 22px;
+        margin-top: 10px;
+    }
+    .hero-content p {
+      font-size:12px;
+    }
+    button.btn {
+      font-size: 10px;
+    }
+    button.btn-orange-fill {
+      font-size: 10px;
     }
 }
