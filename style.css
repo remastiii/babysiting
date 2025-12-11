@@ -101,7 +101,7 @@ header.mobile-header {
 .hero {
   margin-top: 40px;
   height: 70vh;
-  background-image: url('https://images.unsplash.com/photo-1537655780520-1e392ead81f2?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlf');
+  background-image: url('/hero-site.webp');
   background-size: cover;
   background-position: center;
   display: flex;
@@ -497,7 +497,38 @@ footer {
 .logo-container:hover .logo-text {
   color: #c0392b; /* Tamnija nijansa kao i kod linkova */
 }
-
+.faq-section {
+  padding: 50px 20px;
+  
+}
+.faq-section .container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.faq-section h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+}
+.faq-item details {
+  margin-bottom: 15px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+.faq-item summary {
+  padding: 16px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+.faq-item details[open] summary {
+  color: #e65100; /* tvoja orange boja */
+}
+.faq-item details p {
+  padding: 0 20px 20px;
+  color: #555;
+}
 
 /* --- MOBILNA PRILAGODLJIVOST --- */
 @media (max-width: 768px) {
