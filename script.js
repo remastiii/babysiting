@@ -81,18 +81,24 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // Glavni meni - skrol
-    document.querySelectorAll('nav a').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        const targetId = this.getAttribute('href');
-        const targetSection = document.querySelector(targetId);
+    // Glavni meni - skrol SAMO za unutrašnje linkove (#...)
+document.querySelectorAll('nav a').forEach(anchor => {
+  const href = anchor.getAttribute('href');
+  // Proveri da li je link unutrašnji (počinje sa #)
+  if (href && href.startsWith('#')) {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const targetSection = document.querySelector(href);
+      if (targetSection) {
         window.scrollTo({
           top: targetSection.offsetTop - 80,
           behavior: 'smooth'
         });
-      });
+      }
     });
+  }
+  // Ako link NIJE unutrašnji (npr. en.html), NIŠTA ne radi – nešto što pregledač radi automatski
+});
       
   
     document.addEventListener('DOMContentLoaded', () => {
@@ -162,3 +168,4 @@
 
 */
   
+
