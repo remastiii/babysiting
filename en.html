@@ -23,6 +23,8 @@
   <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
+  <link rel="alternate" hreflang="en" href="https://babyguard.rs/en.html" />
+  <link rel="alternate" hreflang="sr" href="https://babyguard.rs/" />
 
   <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css">
@@ -106,31 +108,44 @@
 
 <body>
   <!-- HEADER -->
-  <header class="mobile-header">
-    <div class="logo-container">
-      <a href="#" class="logo-link">
-        <span class="logo-icon"></span>
-        <span class="logo-text">👶BabyGuard🛡️</span>
-        <span class="logo-icon"></span>
-      </a>
-    </div>
-    <button class="menu-toggle animated-section" aria-label="Toggle menu">
-      <span class="bar"></span>
-      <span class="bar"></span>
-      <span class="bar"></span>
-    </button>
-    <nav class="nav-menu">
-      <ul>
-        <li><a href="#about">About</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#pricing">Pricing</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="#careers">Join Us</a></li>
-        <li><a href="#faq">FAQ</a></li>
-        <li><a href="index.html">Srpski</a></li>
-      </ul>
-    </nav>
-  </header>
+<header class="mobile-header">
+  <div class="logo-container">
+    <a href="#" class="logo-link">
+      <span class="logo-icon"></span>
+      <span class="logo-text">👶BabyGuard🛡️</span>
+      <span class="logo-icon"></span>
+    </a>
+  </div>
+
+  <!-- Ikonica ZA MOBILNI (pored hamburgera) -->
+  <a href="index.html" lang="sr" hreflang="sr" class="lang-toggle mobile-lang" aria-label="Switch to Serbian">
+    <span class="lang-icon">🇷🇸</span>
+  </a>
+
+  <button class="menu-toggle animated-section" aria-label="Toggle menu">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </button>
+
+  <nav class="nav-menu">
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#careers">Join Us</a></li>
+      <li><a href="#faq">FAQ</a></li>
+
+      <!-- Ikonica ZA DESKTOP (unutar menija) -->
+      <li class="desktop-lang-item">
+        <a href="index.html" lang="sr" hreflang="sr" class="lang-toggle desktop-lang" aria-label="Switch to Serbian">
+          <span class="lang-icon">🇷🇸</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</header>
 
   <main>
     <section class="hero">
