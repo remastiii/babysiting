@@ -135,6 +135,9 @@ document.querySelectorAll('nav a').forEach(anchor => {
       observer.observe(section);
     });
   });
+window.addEventListener('load', function() {
+  document.body.classList.remove('loading');
+});
 
   /*
   // Funkcija koja osvežava koja je sekcija trenutno "aktivna"
@@ -168,4 +171,5 @@ document.querySelectorAll('nav a').forEach(anchor => {
 
 */
   
+
 
