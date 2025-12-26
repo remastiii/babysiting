@@ -376,6 +376,110 @@ h2 {
     text-align: center;
   }
 }
+/* Naslovi unutar sekcije */
+#zaposljavanje .benefits-title,
+#zaposljavanje .eligibility-title,
+#zaposljavanje .apply-title {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+#zaposljavanje .eligibility-title {
+  margin-top: 2rem;
+  margin-bottom: 0.8rem;
+}
+
+#zaposljavanje .apply-title {
+  margin-top: 1.5rem;
+}
+
+/* Dvokolonska raspodela prednosti */
+#zaposljavanje .benefits-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+#zaposljavanje .benefit {
+  flex: 1;
+  min-width: 280px;
+}
+
+/* Osnovni stilovi za paragrafe unutar benefit blokova */
+#zaposljavanje .benefit p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Lista uslova – malo više razmaka između redova */
+#zaposljavanje .eligibility-list {
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+#zaposljavanje a {
+  color: #e74c3c; 
+  text-decoration: none;
+}
+
+#zaposljavanje a:hover {
+  text-decoration: underline;
+}
+.benefits-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.benefit {
+  flex: 1;
+  min-width: 280px;
+  line-height: 1.5;
+}
+/* Razmaci između naslova i sadržaja u sekciji Careers */
+#careers .section-title {
+  margin-bottom: 1.5rem;
+}
+
+#careers .benefits-title,
+#careers .eligibility-title,
+#careers .apply-title {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* Paragrafi iznad "Why BabyGuard?" */
+#careers > p {
+  margin-bottom: 1rem;
+}
+
+/* Spacing unutar benefit blokova */
+#careers .benefit p {
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* Lista uslova – malo više prostora */
+#careers .eligibility-list {
+  margin: 0.8rem 0 1.5rem;
+  line-height: 1.65;
+}
+/* Linkovi u sekciji Careers – narandžasta boja kao na sajtu */
+#careers a {
+  color: #ff6b35; /* ili tačna vrednost koju koristiš (npr. #e74c3c, #ff6b8b, itd.) */
+  text-decoration: none;
+  font-weight: 600;
+}
+
+#careers a:hover {
+  text-decoration: underline;
+  color: #e55a2b; /* tamnija nijansa za hover – opcionalno */
+}
 
 
 /* --- MODAL --- */
@@ -724,6 +828,7 @@ footer {
       font-size: 10px;
     }
 }
+ /* === INDICATOR DA SE ANIMACIJA POKRECE === */
 body.loading::before {
   content: "⏳ Loading…";
   position: fixed;
@@ -750,4 +855,3 @@ body:not(.loading) *:not(script) {
 body:not(.loading)::before {
   display: none;
 }
-
