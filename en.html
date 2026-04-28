@@ -24,8 +24,10 @@
   <link rel="manifest" href="/site.webmanifest">
 
   <!-- Hreflang (SEO) -->
-  <link rel="alternate" hreflang="sr" href="https://babyguard.rs" />
+  <link rel="alternate" hreflang="sr" href="https://babyguard.rs/" />
   <link rel="alternate" hreflang="en" href="https://babyguard.rs/en.html" />
+  <link rel="alternate" hreflang="ru" href="https://babyguard.rs/ru.html" />
+  <link rel="alternate" hreflang="x-default" href="https://babyguard.rs/" />
 
 
   <!-- Stylesheet -->
@@ -104,10 +106,18 @@
       </a>
     </div>
 
-    <!-- Ikonica ZA MOBILNI (pored hamburgera) -->
-    <a href="/" lang="sr" hreflang="sr" class="lang-toggle mobile-lang" aria-label="Switch to Serbian">
-      <span class="lang-icon">🇷🇸</span>
-    </a>
+    <!-- Language switcher for mobile -->
+    <div class="lang-dropdown mobile-lang">
+      <button class="lang-dropdown-btn" aria-label="Change language">
+        <span class="lang-icon">🇬🇧</span>
+        <span class="lang-arrow">▾</span>
+      </button>
+      <div class="lang-dropdown-content">
+        <a href="/" hreflang="sr">🇷🇸 Srpski</a>
+        <a href="en.html" hreflang="en" class="active-lang">🇬🇧 English</a>
+        <a href="ru.html" hreflang="ru">🇷🇺 Русский</a>
+      </div>
+    </div>
 
     <button class="menu-toggle animated-section" aria-label="Toggle menu">
       <span class="bar"></span>
@@ -125,11 +135,19 @@
         <li><a href="#careers">Join Us</a></li>
         <li><a href="#faq">FAQ</a></li>
 
-        <!-- Ikonica ZA DESKTOP (unutar menija) -->
+        <!-- Language switcher for desktop -->
         <li class="desktop-lang-item">
-          <a href="/" lang="sr" hreflang="sr" class="lang-toggle desktop-lang" aria-label="Switch to Serbian">
-            <span class="lang-icon">🇷🇸</span>
-          </a>
+          <div class="lang-dropdown">
+            <button class="lang-dropdown-btn" aria-label="Change language">
+              <span class="lang-icon">🇬🇧</span>
+              <span class="lang-arrow">▾</span>
+            </button>
+            <div class="lang-dropdown-content">
+              <a href="/" hreflang="sr">🇷🇸 Srpski</a>
+              <a href="en.html" hreflang="en" class="active-lang">🇬🇧 English</a>
+              <a href="ru.html" hreflang="ru">🇷🇺 Русский</a>
+            </div>
+          </div>
         </li>
       </ul>
     </nav>

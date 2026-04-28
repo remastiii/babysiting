@@ -9,6 +9,8 @@
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="sr" href="https://babyguard.rs/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://babyguard.rs/en.html" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://babyguard.rs/ru.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://babyguard.rs/" />
   </url>
 
   <!-- Engleska verzija -->
@@ -16,8 +18,21 @@
     <loc>https://babyguard.rs/en.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://babyguard.rs/en.html" />
     <xhtml:link rel="alternate" hreflang="sr" href="https://babyguard.rs/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://babyguard.rs/en.html" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://babyguard.rs/ru.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://babyguard.rs/" />
+  </url>
+
+  <!-- Ruska verzija -->
+  <url>
+    <loc>https://babyguard.rs/ru.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="sr" href="https://babyguard.rs/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://babyguard.rs/en.html" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://babyguard.rs/ru.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://babyguard.rs/" />
   </url>
 
 </urlset>
