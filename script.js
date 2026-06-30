@@ -65,6 +65,7 @@
         });
 
         if (response.ok) {
+          gtag('event', 'conversion', {'send_to': 'AW-18274328782/hWxfCJHN_cYcEM7B8IlE'});
           document.getElementById('successModal').style.display = 'flex';
           this.reset();
         } else {
