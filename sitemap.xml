@@ -35,4 +35,53 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://babyguard.rs/" />
   </url>
 
+  <!-- Blog – pregled postova -->
+  <url>
+    <loc>https://babyguard.rs/blog/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog – postovi -->
+  <url>
+    <loc>https://babyguard.rs/blog/kako-izabrati-bebisiterku.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://babyguard.rs/blog/10-pitanja-za-bebisiterku.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://babyguard.rs/blog/nocno-cuvanje-novorodjencadi.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://babyguard.rs/blog/bebisiterka-ili-vrtic.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://babyguard.rs/blog/igre-po-uzrastu.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://babyguard.rs/blog/bebisitovanje-na-putovanjima.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://babyguard.rs/blog/prvi-susret-sa-bebisiterkom.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://babyguard.rs/blog/hitno-cuvanje-dece.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
 </urlset>
