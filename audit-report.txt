@@ -1,0 +1,413 @@
+BabyGuard Website — Pre-Redesign Audit
+Branch: feature/babyguard-premium-redesign
+Date: 2026-08-18
+Stack: Vanilla HTML/CSS/JS — static site, hosted on GitHub Pages via CNAME babyguard.rs
+
+================================================================
+1. PROJECT STRUCTURE
+================================================================
+
+MAIN PAGES
+- index.html | Serbian | babyguard.rs/ | Primary page, priority 1.0
+- en.html | English | babyguard.rs/en.html | EN market
+- ru.html | Russian | babyguard.rs/ru.html | RU diaspora market
+- blog/index.html | Serbian | babyguard.rs/blog/ | Blog listing
+- blog/*.html (x8) | Serbian | babyguard.rs/blog/slug.html | Individual posts
+
+BLOG POST URLs (all 8):
+- /blog/kako-izabrati-bebisiterku.html
+- /blog/10-pitanja-za-bebisiterku.html
+- /blog/nocno-cuvanje-novorodjencadi.html
+- /blog/bebisiterka-ili-vrtic.html
+- /blog/igre-po-uzrastu.html
+- /blog/bebisitovanje-na-putovanjima.html
+- /blog/prvi-susret-sa-bebisiterkom.html
+- /blog/hitno-cuvanje-dece.html
+
+COMPONENTS / REUSE
+There are no partials, components, or templates. The header and footer are
+copy-pasted into every single file. This is the biggest structural technical debt.
+
+CSS STRUCTURE
+A single style.css (~1,300 lines) shared across all pages (blog pages use ../style.css).
+Flat stylesheet, no preprocessor (no SCSS). Organization: Reset -> Header -> Hero ->
+Cards -> Services/Prices -> Form -> Modal -> Footer -> Language Dropdown -> Animations
+-> Blog-specific styles. Multiple overlapping responsive breakpoints (max-width: 768px
+appears in several separate blocks).
+
+JAVASCRIPT STRUCTURE
+- script.js — Main page only. Handles: scroll animation (two separate IntersectionObserver
+  instances with overlapping logic), contact form validation + Formspree submission,
+  modal open/close, smooth scroll for hash links, hamburger toggle.
+  NOTE: language dropdown on the main page is CSS :hover only — no JS click handler.
+- blog/blog.js — Blog pages only. Handles: hamburger toggle, scroll animation, language
+  dropdown click handler (more robust than the main page approach).
+
+ASSETS / IMAGES
+- hero-site.webp — Hero background (CSS background-image)
+- babyguardmix.png — OG/Twitter share image (1200x630)
+- Logo.png — Referenced in schema only
+- logoorange.png — Referenced in blog schema JSON-LD
+- Favicon set (.ico, .svg, .png x4, Apple touch) — inconsistently enabled (see Section 5)
+
+There are ZERO <img> tags anywhere in the site. All images are either CSS backgrounds
+or in meta/schema only.
+
+ROUTING / NAVIGATION
+Flat file routing with hash-based in-page navigation on the homepage. Blog pages use
+full absolute paths (/#usluge). No JS router.
+Navigation items: O nama, Usluge, Cenovnik, Hoteli, Kontakt, Zaposljavanje, FAQ, Blog.
+The Recenzije (reviews) section has id="recenzije" but is NOT linked in the nav.
+
+FORMS
+Single contact form (id="contactForm") at #kontakt on each language page.
+Honeypot anti-spam field (name="_gotcha", hidden).
+Submitted via fetch to Formspree endpoint: https://formspree.io/f/mrbyrdrj
+On success: fires Google Ads conversion, shows success modal.
+
+WHATSAPP FUNCTIONALITY
+Three distinct WhatsApp touchpoints:
+1. Floating button (fixed, bottom-right, green, animated) — fires Google Ads conversion + opens WA with pre-filled message
+2. Hero CTA button ("Kontaktirajte nas") — same behavior
+3. Hotel section CTA — separate pre-filled message for hotel partnership
+4. Footer icon — plain wa.me link, no conversion tracking
+
+================================================================
+2. SEO AUDIT
+================================================================
+
+PAGE TITLES
+- index.html: "Čuvanje dece u Beogradu – BabyGuard | Profesionalno bebisitovanje 24/7" — GOOD
+- en.html: "BabyGuard – Professional Childcare in Belgrade" — WEAK (lacks 24/7 differentiator)
+- ru.html: "Присмотр за детьми в Белграде – BabyGuard | Профессиональный бэбиситтинг 24/7" — GOOD
+- blog/index.html: "Blog – Saveti za roditelje | BabyGuard Beograd" — GOOD
+- Blog posts: Keyword-rich, long, with "| BabyGuard" suffix — GOOD
+
+META DESCRIPTIONS
+- index.html: "BabyGuard – profesionalno čuvanje dece i babysitting servis."
+  CRITICAL ISSUE — ~55 chars, missing city, 24/7, pricing signal, urgency
+- en.html: "BabyGuard – trusted babysitting and professional childcare services in Belgrade, available 24/7." — OK
+- ru.html: Full, detailed, includes emergency and 24/7 — GOOD
+- Blog posts: Well-written, specific to article content — GOOD
+
+H1 HEADINGS
+- index.html: "Babysitting Usluge u Beogradu"
+- blog/index.html: "Blog – Saveti za roditelje"
+- Blog posts: Full article title (e.g., "Kako izabrati pouzdanu bebisiterku u Beogradu — checklist za roditelje")
+
+IMPORTANT H2/H3 HEADINGS (index.html)
+- H2: "Mesto gde pažnja postaje standard" (intro card — no keyword value)
+- H2: "O nama"
+- H2: "Naše usluge" + H3s for each service type
+- H2: "Često postavljana pitanja – Bebisitovanje u Beogradu" — strong keyword
+- H2: "Cenovnik"
+- H2: "Saradnja sa Hotelima"
+- H2: "Recenzije roditelja"
+- H2: "Postani deo našeg tima"
+- NO H2 in #kontakt — contact form section has no heading at all
+
+CANONICAL TAGS
+Present and correct on all pages. Each page points to its own absolute URL.
+
+ROBOTS.TXT
+DOES NOT EXIST. The site is crawled without any directives.
+
+SITEMAP
+sitemap.xml is comprehensive. Includes all 11 URLs, correct priority values
+(1.0 for root, 0.8 for lang/blog, 0.7 for posts), changefreq, and hreflang
+alternate links per entry.
+
+STRUCTURED DATA / SCHEMA
+- ChildCare schema — index.html, en.html, ru.html
+- AggregateRating (5/5, 47 reviews) — all 3 main pages
+- Review (x3 per page) — all 3 main pages
+- OfferCatalog with Offer items (25 EUR, 30 EUR) — all 3 main pages
+- OpeningHoursSpecification (24/7) — all 3 main pages
+- Blog schema — blog/index.html
+- Article + BreadcrumbList — all 8 blog posts
+
+One inconsistency: the "url" field in ru.html schema points to https://babyguard.rs/ru.html,
+but "@id" is https://babyguard.rs — same as the SR version. Minor but @id should be unique.
+
+INTERNAL LINKING
+- Homepage nav links to all major sections (hash-based)
+- Blog nav links back to /#section (works for external navigation)
+- Blog index links to all 8 posts
+- Blog posts have breadcrumb nav (Pocetna > Blog > Article)
+- Blog posts link back to homepage via CTA box at article bottom
+- The Recenzije section is NOT linked from navigation
+- No cross-linking between blog posts
+
+IMAGE ALT ATTRIBUTES
+Not applicable — there are zero <img> tags anywhere. Hero image is CSS background-image.
+All icons are inline SVGs. Footer social links use aria-label on <a> wrappers.
+The floating WhatsApp button has NO aria-label — accessibility gap.
+
+LANGUAGE / HREFLANG
+Correctly implemented on all pages and in the sitemap:
+- sr  -> babyguard.rs/
+- en  -> babyguard.rs/en.html
+- ru  -> babyguard.rs/ru.html
+- x-default -> babyguard.rs/
+
+================================================================
+3. HOMEPAGE ANALYSIS
+================================================================
+
+SECTION STRUCTURE (top to bottom)
+1. Fixed header — logo, hamburger, language switcher, nav
+2. Hero — 70vh, background hero-site.webp, H1, description paragraph, two buttons
+3. Intro card — "Mesto gde paznja postaje standard" + tagline
+4. 3-card feature section — Fleksibilno / Provereni profil / Prijatelji dece
+5. O nama (#o-nama) — brand story + credentials list
+6. Nase usluge (#usluge) — 7 service types with H3 + description
+7. FAQ (#faq) — 5 items using <details>/<summary>
+8. Cenovnik (#cenovnik) — 3 price items with EMPTY PRICE AMOUNTS
+9. Zaposljavanje (#zaposljavanje) — job recruitment section
+10. Hoteli (#hoteli) — B2B hotel partnership section (inline-styled grid)
+11. Recenzije (#recenzije) — 3 testimonial cards
+12. Kontakt (#kontakt) — Formspree form (NO section heading/H2)
+13. Footer — copyright, phone, 5 social/contact icons
+14. Floating WhatsApp button — fixed, animated, bottom-right
+
+HERO
+- Background: hero-site.webp (CSS only)
+- White semi-transparent overlay + blur
+- H1 uppercase, 3rem desktop / 24px mobile
+- Two buttons: primary red gradient (WhatsApp) + secondary animated outline (Usluge)
+
+PRIMARY CTA
+WhatsApp with pre-filled message and Google Ads conversion event. Well-designed for local market.
+
+MOBILE LAYOUT
+Responsive with breakpoints at 768px and 321px. Hamburger menu (animated to X).
+Hero text 24px (768px) and 22px (321px). Hero buttons stack vertically. Three feature
+cards wrap to single column.
+
+DESKTOP LAYOUT
+Fixed header (~80px), max-width: 1000px sections centered, glassmorphism cards
+(backdrop-filter blur). Feature cards flex-wrap, hotel grid CSS Grid auto-fit.
+
+CONTENT HIERARCHY — ISSUES
+- GOOD: FAQ targets high-intent search queries
+- GOOD: Services listed clearly
+- WEAK: Intro card between hero and features is pure filler with no keyword value
+- WEAK: Zaposljavanje (recruitment) between Cenovnik and Hoteli disrupts conversion flow
+- WEAK: Prices are completely blank — users cannot self-qualify
+- WEAK: Contact form has no heading
+
+CONVERSION FLOW
+Landing -> Hero (WhatsApp CTA)
+        -> Scroll -> Services -> FAQ -> Cenovnik -> Contact Form
+Persistent: Floating WhatsApp button (all scroll positions)
+
+CURRENT WEAKNESSES
+1. Meta description on primary SR page is near-empty
+2. Prices show "RSD / sat" with blank amounts
+3. No robots.txt
+4. Favicon tags mostly commented out on index.html
+5. <link rel="manifest"> commented out on index.html — PWA disabled on primary page
+6. Logo href="#" on index.html — not pointing to root
+7. Contact form section has no H2 heading
+8. Recruitment section disrupts parent conversion flow
+9. Floating WhatsApp button has no aria-label
+10. Desktop language dropdown breaks on touch devices (hover-only on main site)
+
+================================================================
+4. EXISTING SEO VALUE
+================================================================
+
+PAGES THAT MUST NOT BE REMOVED
+- babyguard.rs/ — primary organic entry point
+- babyguard.rs/blog/ — aggregates all blog SEO equity
+- All 8 blog posts — keyword-targeted, long-form content
+
+URLs THAT MUST NOT CHANGE
+Every blog post slug contains the exact keyword phrase it targets.
+Changing any of these without 301 redirects will destroy accumulated ranking.
+Root / and /blog/ must also remain stable.
+
+IMPORTANT KEYWORDS ALREADY PRESENT
+- "čuvanje dece u Beogradu" / "čuvanje dece Beograd"
+- "bebisiterka u Beogradu" / "bebisiterke Beograd"
+- "hitno čuvanje" / "hitno bebisitovanje"
+- "noćno čuvanje novorođenčadi"
+- "bebisitovanje na putovanjima"
+- "bebisiterka ili vrtić"
+- "proverene bebisiterke"
+- "čuvanje dece 24/7"
+- FAQ keywords: prices per hour, emergency arrival, children with special needs
+- Russian: "няня Белград", "бэбиситтинг Белград"
+
+SEO RISKS DURING REDESIGN
+- [CRITICAL] Changing blog post URL slugs
+- [CRITICAL] Removing or modifying structured data (ChildCare, AggregateRating)
+- [CRITICAL] Removing canonical tags
+- [CRITICAL] Removing hreflang
+- [HIGH] Removing FAQ section or its content
+- [HIGH] Removing conversion tracking (AW-18274328782)
+- [HIGH] Removing sitemap.xml
+- [MEDIUM] Changing section IDs used in internal navigation
+- [MEDIUM] Adding noindex on blog pages accidentally
+
+================================================================
+5. TECHNICAL QUALITY
+================================================================
+
+CONSOLE / RUNTIME ISSUES (visible from code)
+- Two separate IntersectionObserver instances in script.js observe overlapping elements.
+  First observes all <section> tags, second observes .animated-section. Double class-add
+  (visible + animate-in) but no runtime crash.
+- body.loading pattern: <body class="loading"> hides everything via CSS. Class removed only
+  on window.load. If JS fails, THE ENTIRE PAGE IS INVISIBLE. No <noscript> fallback.
+- osveziAktivnuSekciju function is fully commented out — dead code (~30 lines left in).
+- Facebook social link is a large commented-out block in the footer.
+
+RESPONSIVE ISSUES
+- Language dropdown on index.html, en.html, ru.html opens on CSS :hover ONLY.
+  On touch/tablet devices this doesn't work. blog.js uses click — main script.js does not.
+- Hero H1 at 768px has conflicting rules in two separate media query blocks.
+  (40px in one block, 24px in another — last one wins, fragile).
+
+BROKEN LINKS
+- Logo href="#" on index.html and en.html — does not navigate to root.
+
+UNNECESSARY DEPENDENCIES
+- Google Fonts (Poppins) loaded via @import inside CSS — render-blocking, delays first paint.
+  Should use <link rel="preconnect"> + <link rel="stylesheet"> in <head>.
+- Google Ads gtag loaded async at top of <head> on every page including blog posts.
+
+PERFORMANCE CONCERNS
+- @import url(...) for Google Fonts inside CSS is the worst loading method for performance.
+- No lazy loading (no <img> tags currently, so not applicable).
+- hero-site.webp as CSS background — browser discovers it late, no fetchpriority="high" possible.
+- Inline <style> block for WhatsApp float is inside <body> near closing tag.
+
+ACCESSIBILITY ISSUES
+- Floating WhatsApp button has no aria-label — MEDIUM
+- Contact form section (#kontakt) has no heading — screen readers lose context — MEDIUM
+- body.loading hides all content from screen readers until JS fires — MEDIUM
+- No "skip to content" link — LOW
+- Color contrast: #e74c3c red on white — passes AA for large text, borderline for small — LOW
+- Emoji in logo text ("BabyGuard") read aloud by screen readers — LOW
+
+FAVICON INCONSISTENCY
+- index.html: all favicon tags COMMENTED OUT except <link rel="icon" href="/icon.ico">
+- en.html: FULL favicon set correctly declared
+- ru.html: only <link rel="icon" href="/icon.ico">
+- <link rel="manifest"> commented out on index.html — PWA disabled on primary page
+
+================================================================
+6. RECOMMENDATIONS
+================================================================
+
+A. THINGS WE MUST PRESERVE
+1. All blog post URLs — exact slugs, no changes
+2. /blog/ URL
+3. Root / as primary page
+4. en.html and ru.html URLs (hreflang targets)
+5. All canonical <link rel="canonical"> tags
+6. Complete hreflang setup (sr/en/ru/x-default)
+7. All JSON-LD structured data: ChildCare, AggregateRating, Review, OfferCatalog,
+   Article, BreadcrumbList, Blog
+8. Google Ads tag AW-18274328782 and conversion label hWxfCJHN_cYcEM7B8IlE
+9. Formspree endpoint mrbyrdrj
+10. WhatsApp number +381613166770 and pre-filled message text
+11. sitemap.xml — update if URLs change
+12. FAQ section content (keyword-dense, featured snippet candidate)
+13. Google Search Console verification meta tag
+14. Instagram link (instagram.com/babyguard.rs)
+
+B. THINGS WE CAN REDESIGN FREELY
+1. Visual design — colors, layout, typography, card styles
+2. Glassmorphism aesthetic — can keep or replace
+3. Section order on homepage (with care — don't change IDs)
+4. About/feature card section (3-card block)
+5. Logo visual design — keep "BabyGuard" name
+6. Button styles and animation
+7. Footer layout
+8. Hero image (replace hero-site.webp with new asset)
+9. Hotel section visual design
+10. Testimonials/reviews visual design
+11. Animations and transitions
+
+C. THINGS WE SHOULD IMPROVE
+- [HIGH]   Rewrite index.html meta description (add city, 24/7, emergency, trust signal)
+- [HIGH]   Add robots.txt
+- [HIGH]   Fix logo href="#" -> href="/" on index.html and en.html
+- [HIGH]   Add actual prices to the Cenovnik section
+- [MEDIUM] Add H2 to the #kontakt section
+- [MEDIUM] Uncomment favicon tags on index.html; standardize across ru.html
+- [MEDIUM] Uncomment <link rel="manifest"> on index.html
+- [MEDIUM] Add aria-label to floating WhatsApp button
+- [MEDIUM] Add click-based language dropdown handler to main script.js
+- [MEDIUM] Add floating WhatsApp button to blog posts
+- [LOW]    Merge duplicate IntersectionObserver logic in script.js
+- [LOW]    Replace @import font loading with <link rel="preconnect"> method
+- [LOW]    Move inline WhatsApp float <style> block to style.css
+- [LOW]    Remove dead code (commented Facebook link, osveziAktivnuSekciju)
+- [LOW]    Add cross-linking between related blog posts
+- [LOW]    Fix @id uniqueness in ru.html schema
+
+D. THINGS WE SHOULD NOT CHANGE WITHOUT FURTHER ANALYSIS
+1. Any blog post URL slug — requires 301 redirect mapping first
+2. Section id attributes (#o-nama, #usluge, #cenovnik, #hoteli, #kontakt, #zaposljavanje, #faq)
+   — all used in navigation links across all pages
+3. Google Ads measurement ID and conversion label — verify in Google Ads before touching
+4. AggregateRating ratingCount: 47 — if removed/lowered may affect rich results
+5. Formspree endpoint — changing it breaks all form submissions
+6. ChildCare schema @id (https://babyguard.rs) — canonical entity identifier
+
+================================================================
+REDESIGN SAFETY CHECKLIST
+================================================================
+
+Use this before merging any redesign work.
+
+URLS & ROUTING
+[ ] All 8 blog post URLs unchanged (or 301s mapped for every changed URL)
+[ ] /blog/ unchanged
+[ ] / (root) unchanged
+[ ] en.html and ru.html unchanged
+
+SEO TAGS
+[ ] <link rel="canonical"> present on every page, pointing to correct URL
+[ ] <link rel="alternate" hreflang="..."> block present on every page (sr, en, ru, x-default)
+[ ] Page <title> present and keyword-appropriate on every page
+[ ] <meta name="description"> present on every page (minimum 120 chars for main pages)
+[ ] <meta name="google-site-verification"> present on all pages
+
+STRUCTURED DATA
+[ ] ChildCare JSON-LD block present on index.html, en.html, ru.html
+[ ] AggregateRating present in ChildCare schema
+[ ] Article + BreadcrumbList present on all 8 blog posts
+[ ] Blog schema present on blog/index.html
+[ ] Validate all schemas with Google's Rich Results Test after launch
+
+TRACKING & CONVERSION
+[ ] Google Ads gtag AW-18274328782 present in <head> of every page
+[ ] Conversion label hWxfCJHN_cYcEM7B8IlE fires on WhatsApp CTA click
+[ ] Formspree form submits correctly and fires conversion on success
+[ ] WhatsApp phone number +381613166770 correct in all links
+
+SITEMAP & CRAWL
+[ ] sitemap.xml updated to reflect any new/changed URLs
+[ ] robots.txt created (currently missing)
+[ ] CNAME file preserved (babyguard.rs)
+[ ] google211986f5711753d6.html preserved (Search Console verification file)
+
+CONTENT INTEGRITY
+[ ] FAQ section and all 5 questions preserved
+[ ] All 3 homepage testimonials / reviews preserved (they match JSON-LD data)
+[ ] Contact form fields and honeypot field (_gotcha) preserved
+[ ] WhatsApp pre-filled message text preserved
+
+TECHNICAL
+[ ] Logo links to / (not #)
+[ ] Hamburger menu works on mobile
+[ ] Language switcher works on touch devices
+[ ] body.loading pattern has a <noscript> fallback or is removed
+[ ] site.webmanifest linked and valid
+[ ] Favicon set complete and consistent across all pages
+[ ] No noindex accidentally added to any page
+[ ] Run Lighthouse (Performance, SEO, Accessibility) on all 3 main pages after launch
