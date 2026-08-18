@@ -1,176 +1,247 @@
+﻿/* ================================================================
+   BabyGuard – Main page JS
+   script.js  |  branch: feature/babyguard-premium-redesign
+   Blog pages use blog/blog.js — this file is for index.html only.
+================================================================ */
+'use strict';
 
-    // Animacija prilikom skrolovanja
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.1 });
+/* ---------------------------------------------------------------
+   1. HAMBURGER – toggle mobile nav panel
+--------------------------------------------------------------- */
+(function () {
+  var hamburger = document.querySelector('.hamburger');
+  var mobileNav = document.querySelector('.mobile-nav');
+  if (!hamburger || !mobileNav) return;
 
-    document.querySelectorAll('section').forEach(section => {
-      observer.observe(section);
-    });
+  hamburger.addEventListener('click', function () {
+    var isOpen = mobileNav.classList.toggle('open');
+    hamburger.classList.toggle('open', isOpen);
+    hamburger.setAttribute('aria-expanded', String(isOpen));
+  });
 
-    // Forma
-    document.getElementById('contactForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
-
-      // Honeypot provera
-      if (document.querySelector('input[name="_gotcha"]').value) {
-        document.getElementById('successModal').style.display = 'flex';
-        document.querySelector('.modal-content h3').textContent = '✅ Poruka poslata!';
-        document.querySelector('.modal-content p').textContent = 'Hvala na poruci!';
-        this.reset();
-        return;
-      }
-
-      const ime = document.getElementById('ime').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const telefon = document.getElementById('telefon').value.trim();
-      const poruka = document.getElementById('poruka').value.trim();
-
-      if (ime.length < 3) {
-        alert('Ime mora imati najmanje 3 karaktera.');
-        return;
-      }
-      if (poruka.length < 10) {
-        alert('Poruka mora imati najmanje 10 karaktera.');
-        return;
-      }
-      if (!email && !telefon) {
-        alert('Morate uneti email ILI broj telefona.');
-        return;
-      }
-      if (email && !/^\S+@\S+\.\S+$/.test(email)) {
-        alert('Unesite ispravnu email adresu.');
-        return;
-      }
-      if (telefon && !/^\+?[0-9\s\-()]{7,}$/.test(telefon)) {
-        alert('Unesite ispravan broj telefona (npr. +381 60 123 4567).');
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append('ime', ime);
-      if (email) formData.append('email', email);
-      if (telefon) formData.append('telefon', telefon);
-      formData.append('poruka', poruka);
-
-      try {
-        const response = await fetch('https://formspree.io/f/mrbyrdrj', {
-          method: 'POST',
-          body: formData,
-          headers: { 'Accept': 'application/json' }
-        });
-
-        if (response.ok) {
-          gtag('event', 'conversion', {'send_to': 'AW-18274328782/hWxfCJHN_cYcEM7B8IlE'});
-          document.getElementById('successModal').style.display = 'flex';
-          this.reset();
-        } else {
-          const error = await response.json();
-          alert('Greška: ' + (error.error || 'Neuspešno slanje. Pokušajte kasnije.'));
-        }
-      } catch (err) {
-        alert('Došlo je do greške. Proverite internet konekciju.');
-      }
-    });
-
-    document.getElementById('closeModal').addEventListener('click', function() {
-      document.getElementById('successModal').style.display = 'none';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    // Glavni meni - skrol SAMO za unutrašnje linkove (#...)
-document.querySelectorAll('nav a').forEach(anchor => {
-  const href = anchor.getAttribute('href');
-  // Proveri da li je link unutrašnji (počinje sa #)
-  if (href && href.startsWith('#')) {
-    anchor.addEventListener('click', function(e) {
-      e.preventDefault();
-      const targetSection = document.querySelector(href);
-      if (targetSection) {
-        window.scrollTo({
-          top: targetSection.offsetTop - 80,
-          behavior: 'smooth'
-        });
-      }
-    });
-  }
-  // Ako link NIJE unutrašnji (npr. en.html), NIŠTA ne radi – nešto što pregledač radi automatski
-});
-      
-  
-    document.addEventListener('DOMContentLoaded', () => {
-      const menuToggle = document.querySelector('.menu-toggle');
-      const navMenu = document.querySelector('.nav-menu');
-
-      menuToggle.addEventListener('click', () => {
-        navMenu.classList.toggle('active');
-        menuToggle.classList.toggle('active'); // ← ovo pravi X
-      });
-    });
-
-  document.addEventListener('DOMContentLoaded', () => {
-    const sections = document.querySelectorAll('.animated-section');
-
-    const observerOptions = {
-      root: null, // viewport
-      rootMargin: '0px 0px -100px 0px', // pokreni animaciju ranije (kada je 100px do dna)
-      threshold: 0.1 // 10% elementa mora biti u vidnom polju
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('animate-in');
-        } else {
-          // Ukloni klasu kad izađe iz vidljivosti – omogućava ponavljanje
-          entry.target.classList.remove('animate-in');
-        }
-      });
-    }, observerOptions);
-
-    sections.forEach(section => {
-      observer.observe(section);
+  // Close on mobile nav link click
+  mobileNav.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', function () {
+      mobileNav.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
     });
   });
-window.addEventListener('load', function() {
-  document.body.classList.remove('loading');
-});
+})();
 
-  /*
-  // Funkcija koja osvežava koja je sekcija trenutno "aktivna"
-  function osveziAktivnuSekciju() {
-    const sekcije = document.querySelectorAll('.scroll-sekcija');
-    let aktivna = null;
-    let najblizaRazlika = Infinity;
+/* ---------------------------------------------------------------
+   2. LANGUAGE DROPDOWN – click-based (touch friendly)
+--------------------------------------------------------------- */
+(function () {
+  var dropdown = document.querySelector('.header-actions .lang-dropdown');
+  if (!dropdown) return;
 
-    sekcije.forEach(sekcija => {
-      sekcija.classList.remove('aktivna-sekcija');
-      const sredinaSekcije = sekcija.offsetTop + sekcija.offsetHeight / 2;
-      const sredinaProzora = window.scrollY + window.innerHeight / 2;
-      const razlika = Math.abs(sredinaProzora - sredinaSekcije);
+  var btn = dropdown.querySelector('.lang-btn');
+  if (!btn) return;
 
-      if (razlika < najblizaRazlika) {
-        najblizaRazlika = razlika;
-        aktivna = sekcija;
+  btn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    dropdown.classList.toggle('open');
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!dropdown.contains(e.target)) {
+      dropdown.classList.remove('open');
+    }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') dropdown.classList.remove('open');
+  });
+})();
+
+/* ---------------------------------------------------------------
+   3. SMOOTH SCROLL – subtract sticky header height
+--------------------------------------------------------------- */
+(function () {
+  document.addEventListener('click', function (e) {
+    var anchor = e.target.closest('a[href^="#"]');
+    if (!anchor) return;
+
+    var href = anchor.getAttribute('href');
+    if (!href || href === '#') return;
+
+    var target = document.querySelector(href);
+    if (!target) return;
+
+    e.preventDefault();
+    var header = document.querySelector('.site-header');
+    var offset = header ? header.offsetHeight : 72;
+    var top = target.getBoundingClientRect().top + window.pageYOffset - offset - 16;
+    window.scrollTo({ top: top, behavior: 'smooth' });
+  });
+})();
+
+/* ---------------------------------------------------------------
+   4. REVEAL ANIMATION – single IntersectionObserver
+--------------------------------------------------------------- */
+(function () {
+  var els = document.querySelectorAll('.reveal');
+  if (!els.length) return;
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('reveal-in');
+        observer.unobserve(entry.target);
       }
     });
+  }, { threshold: 0.08 });
 
-    if (aktivna) {
-      aktivna.classList.add('aktivna-sekcija');
+  els.forEach(function (el) { observer.observe(el); });
+})();
+
+/* ---------------------------------------------------------------
+   5. NEED CARDS – keyboard accessibility (Enter / Space)
+--------------------------------------------------------------- */
+(function () {
+  document.querySelectorAll('.need-card[tabindex]').forEach(function (card) {
+    card.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        card.click();
+      }
+    });
+  });
+})();
+
+/* ---------------------------------------------------------------
+   6. CONTACT FORM – validation + Formspree submit + success modal
+--------------------------------------------------------------- */
+(function () {
+  var form = document.getElementById('contactForm');
+  if (!form) return;
+
+  var successModal = document.getElementById('successModal');
+  var closeBtn     = document.getElementById('closeModal');
+
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  var PHONE_RE = /^[0-9+\s\-()/]{7,20}$/;
+
+  function showError(input, msg) {
+    var group = input.closest('.form-group');
+    if (!group) return;
+    var old = group.querySelector('.field-error');
+    if (old) old.remove();
+    input.style.borderColor = '#c0392b';
+    var span = document.createElement('span');
+    span.className = 'field-error form-note';
+    span.style.color = '#c0392b';
+    span.textContent = msg;
+    group.appendChild(span);
+  }
+
+  function clearErrors() {
+    form.querySelectorAll('.field-error').forEach(function (el) { el.remove(); });
+    form.querySelectorAll('input,textarea').forEach(function (el) { el.style.borderColor = ''; });
+  }
+
+  function validate() {
+    clearErrors();
+    var ok = true;
+
+    var ime     = form.querySelector('[name="ime"]');
+    var email   = form.querySelector('[name="email"]');
+    var telefon = form.querySelector('[name="telefon"]');
+    var poruka  = form.querySelector('[name="poruka"]');
+
+    if (ime && ime.value.trim().length < 3) {
+      showError(ime, 'Unesite ime (min. 3 znaka).');
+      ok = false;
+    }
+
+    var hasEmail   = email   && email.value.trim().length   > 0;
+    var hasPhone   = telefon && telefon.value.trim().length > 0;
+
+    if (!hasEmail && !hasPhone) {
+      if (email) showError(email, 'Unesite email ili telefon.');
+      ok = false;
+    } else {
+      if (hasEmail && !EMAIL_RE.test(email.value.trim())) {
+        showError(email, 'Nevažeća email adresa.');
+        ok = false;
+      }
+      if (hasPhone && !PHONE_RE.test(telefon.value.trim())) {
+        showError(telefon, 'Nevažeći format telefona.');
+        ok = false;
+      }
+    }
+
+    if (poruka && poruka.value.trim().length < 10) {
+      showError(poruka, 'Poruka mora imati min. 10 znakova.');
+      ok = false;
+    }
+
+    return ok;
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    // Honeypot check
+    var honeypot = form.querySelector('[name="_honey"]');
+    if (honeypot && honeypot.value) return;
+
+    if (!validate()) return;
+
+    var submitBtn = form.querySelector('[type="submit"]');
+    var origText  = submitBtn ? submitBtn.textContent : '';
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Šalje se...'; }
+
+    var data = new FormData(form);
+
+    fetch(form.action, {
+      method: 'POST',
+      body: data,
+      headers: { Accept: 'application/json' }
+    })
+    .then(function (res) {
+      if (!res.ok) throw new Error('Network error');
+      return res.json();
+    })
+    .then(function () {
+      // Google Ads conversion
+      if (typeof gtag === 'function') {
+        gtag('event', 'conversion', {
+          send_to: 'AW-18274328782/hWxfCJHN_cYcEM7B8IlE'
+        });
+      }
+
+      form.reset();
+      clearErrors();
+
+      if (successModal) {
+        successModal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+    })
+    .catch(function () {
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = origText; }
+      alert('Greška pri slanju. Pokušajte ponovo ili nas kontaktirajte direktno.');
+    });
+  });
+
+  // Close modal
+  function closeModal() {
+    if (successModal) {
+      successModal.style.display = 'none';
+      document.body.style.overflow = '';
     }
   }
 
-  // Pokreni pri svakom skrolu
-  window.addEventListener('scroll', osveziAktivnuSekciju);
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
 
-  // Pokreni odmah na učitavanju stranice
-  window.addEventListener('load', osveziAktivnuSekciju);
-
-*/
-  
-
-
+  if (successModal) {
+    successModal.addEventListener('click', function (e) {
+      if (e.target === successModal) closeModal();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && successModal.style.display === 'flex') closeModal();
+    });
+  }
+})();
