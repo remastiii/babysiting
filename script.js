@@ -245,3 +245,163 @@
     });
   }
 })();
+
+/* ---------------------------------------------------------------
+   7. CHAT WIDGET – FAQ bot with WhatsApp CTA
+--------------------------------------------------------------- */
+(function () {
+  var panel      = document.getElementById('chat-panel');
+  var toggleBtn  = document.getElementById('chat-toggle-btn');
+  var closeBtn   = document.querySelector('.chat-close-btn');
+  var messagesEl = document.getElementById('chatMessages');
+  var quickEl    = document.getElementById('chatQuick');
+  var badge      = document.getElementById('chatBadge');
+  var iconMsg    = toggleBtn && toggleBtn.querySelector('.chat-icon-msg');
+  var iconX      = toggleBtn && toggleBtn.querySelector('.chat-icon-x');
+
+  if (!panel || !toggleBtn) return;
+
+  var isOpen    = false;
+  var initiated = false;
+
+  var WA_URL = 'https://wa.me/381613166770?text=Pozdrav%2C%20zainteresovani%20smo%20za%20BabyGuard%20usluge%20%C4%8Duvanja%20dece.';
+
+  var QA = [
+    {
+      q: '🔍 Kako funkcioniše usluga?',
+      a: 'Kontaktirate nas, opišete potrebe (uzrast dece, termini, lokacija). Mi predlažemo overene dadilje, vi birate i ugovarate termin. Brzo i jednostavno! 🤝'
+    },
+    {
+      q: '📅 Imate li slobodnih dadilja?',
+      a: 'Dostupnost varira po lokaciji i terminu. Za aktuelne slobodne termine — napišite nam direktno i odgovaramo u roku od par minuta.'
+    },
+    {
+      q: '🛡️ Kako proveravate dadilje?',
+      a: 'Svaka dadilja prolazi kroz proveru dokumenata i referenci, lični razgovor i testni period. Sarađujemo isključivo sa pouzdanim i iskusnim osobama.'
+    },
+    {
+      q: '📍 Koje gradove pokrivate?',
+      a: 'Pokrivamo Beograd i okolinu i Novi Sad. Za ostale gradove nas kontaktirajte — trudimo se da pomognemo i van ovih lokacija.'
+    },
+    {
+      q: '✨ Šta je uključeno u uslugu?',
+      a: 'Čuvanje dece, pomoć oko obroka i edukativne igre prema uzrastu. Sve se dogovara unapred prema vašim specifičnim potrebama.'
+    },
+    {
+      q: '💰 Koliko košta čuvanje?',
+      a: 'Cena zavisi od termina, broja dece, trajanja i lokacije. Pošaljite nam upit i odmah ćemo vam dati konkretnu ponudu bez obaveze.'
+    },
+    {
+      q: '⚡ Možete li organizovati isti dan?',
+      a: 'Da! Za hitna čuvanja možemo u kratkom roku obezbediti dadilju. Pišite nam odmah i rešavamo zajedno.'
+    },
+    {
+      q: '🌙 Da li radite i noću?',
+      a: 'Da, imamo dadilje za noćna dežurstva. Idealno za novorođenčad ili roditelje koji rade u noćnoj smeni.'
+    }
+  ];
+
+  function addMsg(text, type) {
+    var el = document.createElement('div');
+    el.className = 'chat-msg ' + type;
+    el.textContent = text;
+    messagesEl.appendChild(el);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  function showTyping(cb, delay) {
+    var typing = document.createElement('div');
+    typing.className = 'chat-typing';
+    typing.innerHTML = '<span></span><span></span><span></span>';
+    messagesEl.appendChild(typing);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    setTimeout(function () {
+      typing.remove();
+      cb();
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }, delay || 700);
+  }
+
+  function clearQuick() { quickEl.innerHTML = ''; }
+
+  function showMainMenu() {
+    clearQuick();
+    QA.forEach(function (item, i) {
+      var chip = document.createElement('button');
+      chip.className = 'chat-chip';
+      chip.textContent = item.q;
+      chip.addEventListener('click', function () { handleQuestion(i); });
+      quickEl.appendChild(chip);
+    });
+  }
+
+  function showEndOptions() {
+    clearQuick();
+
+    var back = document.createElement('button');
+    back.className = 'chat-chip';
+    back.textContent = '⬅ Još pitanja';
+    back.addEventListener('click', showMainMenu);
+
+    var wa = document.createElement('button');
+    wa.className = 'chat-chip wa';
+    wa.textContent = '💬 Pišite nam na WhatsApp';
+    wa.addEventListener('click', function () {
+      if (typeof gtag === 'function') {
+        gtag('event', 'conversion', { send_to: 'AW-18274328782/hWxfCJHN_cYcEM7B8IlE' });
+      }
+      window.open(WA_URL, '_blank', 'noopener,noreferrer');
+    });
+
+    quickEl.appendChild(back);
+    quickEl.appendChild(wa);
+  }
+
+  function handleQuestion(index) {
+    clearQuick();
+    addMsg(QA[index].q, 'user');
+    showTyping(function () {
+      addMsg(QA[index].a, 'bot');
+      showEndOptions();
+    }, 700);
+  }
+
+  function initChat() {
+    if (initiated) return;
+    initiated = true;
+    showTyping(function () {
+      addMsg('Zdravo! 👋 Ja sam BabyGuard asistent. Odaberite pitanje ili nas kontaktirajte direktno.', 'bot');
+      setTimeout(showMainMenu, 300);
+    }, 600);
+  }
+
+  function openChat() {
+    isOpen = true;
+    panel.classList.add('open');
+    panel.setAttribute('aria-hidden', 'false');
+    toggleBtn.setAttribute('aria-expanded', 'true');
+    if (iconMsg) iconMsg.style.display = 'none';
+    if (iconX)   iconX.style.display   = '';
+    if (badge)   badge.classList.add('hidden');
+    initChat();
+  }
+
+  function closeChat() {
+    isOpen = false;
+    panel.classList.remove('open');
+    panel.setAttribute('aria-hidden', 'true');
+    toggleBtn.setAttribute('aria-expanded', 'false');
+    if (iconMsg) iconMsg.style.display = '';
+    if (iconX)   iconX.style.display   = 'none';
+  }
+
+  toggleBtn.addEventListener('click', function () {
+    if (isOpen) closeChat(); else openChat();
+  });
+
+  if (closeBtn) closeBtn.addEventListener('click', closeChat);
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && isOpen) closeChat();
+  });
+})();
