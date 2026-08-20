@@ -1075,7 +1075,14 @@ h3 { font-size: 1rem; font-weight: 600; }
   #whatsapp-float { width: 50px; height: 50px; bottom: 18px; right: 18px; }
   #chat-widget { bottom: 82px; right: 18px; }
   #chat-toggle-btn { width: 50px; height: 50px; }
-  #chat-panel { width: calc(100vw - 48px); }
+  #chat-panel {
+    width: calc(100vw - 32px);
+    max-height: min(560px, calc(100vh - 140px));
+    right: -2px;
+  }
+  .chat-msg  { font-size: .93rem; line-height: 1.52; padding: 10px 14px; }
+  .chat-chip { font-size: .83rem; padding: 7px 13px; }
+  .chat-messages { padding: 16px 14px 8px; gap: 10px; }
 
   .sitters-grid { grid-template-columns: repeat(2,1fr); }
   .needs-grid   { grid-template-columns: repeat(2,1fr); }
@@ -1103,6 +1110,11 @@ header.mobile-header {
   border-bottom: 1px solid rgba(255,255,255,.65);
   box-shadow: 0 4px 20px rgba(0,0,0,.08);
   height: 80px;
+}
+
+/* Push main content below the fixed blog header */
+body:has(header.mobile-header) main {
+  padding-top: 80px;
 }
 
 .menu-toggle {

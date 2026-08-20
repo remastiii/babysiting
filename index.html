@@ -543,7 +543,7 @@
           <div class="faq-item reveal">
             <details>
               <summary>Koliko košta bebisiterka u Beogradu po satu?</summary>
-              <p>Cena bebisiterke u Beogradu zavisi od vrste usluge. Naša osnovna tarifa počinje od <strong>700 RSD po satu</strong> za dnevno čuvanje dece. Noćno, vikend i hitno bebisitovanje imaju posebne cene, uvek transparentno navedene pre početka saradnje.</p>
+              <p>Cena bebisiterke u Beogradu zavisi od vrste usluge, hitnosti i trajanja. Satnica počinje <strong>od 890 din/h</strong> — dugoročna saradnja i redovni termini imaju povoljniju cenu od jednokratnih ili hitnih čuvanja. Sve cene su transparentno dogovorene pre početka saradnje.</p>
             </details>
           </div>
 
@@ -667,25 +667,25 @@
           <h2>Pošaljite nam poruku</h2>
           <p class="section-sub">Odgovaramo u roku od nekoliko sati.</p>
         </div>
-        <form id="contactForm" class="contact-form reveal">
+        <form id="contactForm" class="contact-form reveal" action="https://formspree.io/f/mrbyrdrj" method="POST">
           <input type="text" name="_gotcha" style="display:none !important;" tabindex="-1" autocomplete="off">
           <div class="form-row">
             <div class="form-group">
               <label for="ime">Ime i prezime *</label>
-              <input type="text" id="ime" required minlength="3" placeholder="Vaše ime">
+              <input type="text" id="ime" name="ime" required minlength="3" placeholder="Vaše ime">
             </div>
             <div class="form-group">
               <label for="telefon">Telefon *</label>
-              <input type="tel" id="telefon" placeholder="+381 60 123 4567">
+              <input type="tel" id="telefon" name="telefon" placeholder="+381 60 123 4567">
             </div>
           </div>
           <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" id="email" placeholder="primer@email.com">
+            <input type="email" id="email" name="email" placeholder="primer@email.com">
           </div>
           <div class="form-group">
             <label for="poruka">Poruka (datum, vreme, broj dece; prijava za rad) *</label>
-            <textarea id="poruka" rows="4" required minlength="10" placeholder="Recite nam šta vam je potrebno..."></textarea>
+            <textarea id="poruka" name="poruka" rows="4" required minlength="10" placeholder="Recite nam šta vam je potrebno..."></textarea>
           </div>
           <p class="form-note">* Morate uneti <strong>email ILI telefon</strong>.</p>
           <button type="submit" class="btn-primary">Pošalji zahtev</button>

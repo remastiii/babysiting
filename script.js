@@ -120,6 +120,12 @@
   var successModal = document.getElementById('successModal');
   var closeBtn     = document.getElementById('closeModal');
 
+  // Rate limiting: max 3 submissions per session, 60s cooldown
+  var submitCount    = 0;
+  var MAX_SUBMITS    = 3;
+  var COOLDOWN_MS    = 60 * 1000;
+  var lastSubmitTime = 0;
+
   var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   var PHONE_RE = /^[0-9+\s\-()/]{7,20}$/;
 
@@ -189,6 +195,21 @@
 
     if (!validate()) return;
 
+    // Rate limit check
+    var now = Date.now();
+    var elapsed = now - lastSubmitTime;
+    if (lastSubmitTime > 0 && elapsed < COOLDOWN_MS) {
+      var wait = Math.ceil((COOLDOWN_MS - elapsed) / 1000);
+      var porukaCd = form.querySelector('[name="poruka"]');
+      if (porukaCd) showError(porukaCd, 'Sačekajte još ' + wait + 's pre sledećeg slanja.');
+      return;
+    }
+    if (submitCount >= MAX_SUBMITS) {
+      var porukaCd = form.querySelector('[name="poruka"]');
+      if (porukaCd) showError(porukaCd, 'Dostigli ste maksimalan broj poruka. Kontaktirajte nas direktno.');
+      return;
+    }
+
     var submitBtn = form.querySelector('[type="submit"]');
     var origText  = submitBtn ? submitBtn.textContent : '';
     if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Šalje se...'; }
@@ -212,6 +233,10 @@
         });
       }
 
+      submitCount++;
+      lastSubmitTime = Date.now();
+
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = origText; }
       form.reset();
       clearErrors();
 
@@ -232,6 +257,7 @@
       successModal.style.display = 'none';
       document.body.style.overflow = '';
     }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   if (closeBtn) closeBtn.addEventListener('click', closeModal);
@@ -264,42 +290,63 @@
   var isOpen    = false;
   var initiated = false;
 
-  var WA_URL = 'https://wa.me/381613166770?text=Pozdrav%2C%20zainteresovani%20smo%20za%20BabyGuard%20usluge%20%C4%8Duvanja%20dece.';
+  // Language-aware content
+  var lang = (document.documentElement.lang || 'sr').split('-')[0].toLowerCase();
 
-  var QA = [
-    {
-      q: '🔍 Kako funkcioniše usluga?',
-      a: 'Kontaktirate nas, opišete potrebe (uzrast dece, termini, lokacija). Mi predlažemo overene dadilje, vi birate i ugovarate termin. Brzo i jednostavno! 🤝'
+  var CHAT_CONTENT = {
+    sr: {
+      waUrl:   'https://wa.me/381613166770?text=Pozdrav%2C%20zainteresovani%20smo%20za%20BabyGuard%20usluge%20%C4%8Duvanja%20dece.',
+      welcome: 'Zdravo! 👋 Ja sam BabyGuard asistent. Odaberite pitanje ili nas kontaktirajte direktno.',
+      backBtn: '⬅ Još pitanja',
+      waBtn:   '💬 Pišite nam na WhatsApp',
+      qa: [
+        { q: '🔍 Kako funkcioniše usluga?',      a: 'Kontaktirate nas, opišete potrebe (uzrast dece, termini, lokacija). Mi predlažemo overene dadilje, vi birate i ugovarate termin. Brzo i jednostavno! 🤝' },
+        { q: '📅 Imate li slobodnih dadilja?',    a: 'Dostupnost varira po lokaciji i terminu. Za aktuelne slobodne termine — napišite nam direktno i odgovaramo u roku od par minuta.' },
+        { q: '🛡️ Kako proveravate dadilje?',      a: 'Svaka dadilja prolazi kroz proveru dokumenata i referenci, lični razgovor i testni period. Sarađujemo isključivo sa pouzdanim i iskusnim osobama.' },
+        { q: '📍 Koje gradove pokrivate?',         a: 'Pokrivamo Beograd i okolinu i Novi Sad. Za ostale gradove nas kontaktirajte — trudimo se da pomognemo i van ovih lokacija.' },
+        { q: '✨ Šta je uključeno u uslugu?',      a: 'Čuvanje dece, pomoć oko obroka i edukativne igre prema uzrastu. Sve se dogovara unapred prema vašim specifičnim potrebama.' },
+        { q: '💰 Koliko košta čuvanje?',           a: 'Cena zavisi od termina, broja dece, trajanja i lokacije. Pošaljite nam upit i odmah ćemo vam dati konkretnu ponudu bez obaveze.' },
+        { q: '⚡ Možete li organizovati isti dan?', a: 'Da! Za hitna čuvanja možemo u kratkom roku obezbediti dadilju. Pišite nam odmah i rešavamo zajedno.' },
+        { q: '🌙 Da li radite i noću?',            a: 'Da, imamo dadilje za noćna dežurstva. Idealno za novorođenčad ili roditelje koji rade u noćnoj smeni.' }
+      ]
     },
-    {
-      q: '📅 Imate li slobodnih dadilja?',
-      a: 'Dostupnost varira po lokaciji i terminu. Za aktuelne slobodne termine — napišite nam direktno i odgovaramo u roku od par minuta.'
+    en: {
+      waUrl:   'https://wa.me/381613166770?text=Hello%2C%20we%20are%20interested%20in%20BabyGuard%20childcare%20services.%20Our%20children%20are%20___%20years%20old.',
+      welcome: 'Hello! 👋 I\'m the BabyGuard assistant. Choose a question or contact us directly.',
+      backBtn: '⬅ More questions',
+      waBtn:   '💬 Write to us on WhatsApp',
+      qa: [
+        { q: '🔍 How does the service work?',       a: 'You contact us, describe your needs (child\'s age, schedule, location). We suggest verified sitters, you choose and book. Fast and easy! 🤝' },
+        { q: '📅 Do you have available sitters?',   a: 'Availability varies by location and time. For current openings — write to us directly and we\'ll reply within minutes.' },
+        { q: '🛡️ How do you verify sitters?',       a: 'Every sitter goes through document & reference checks, a personal interview, and a trial period. We only work with reliable, experienced people.' },
+        { q: '📍 Which areas do you cover?',        a: 'We cover Belgrade and the surrounding area, as well as Novi Sad. Contact us for other cities — we\'ll do our best to help.' },
+        { q: '✨ What\'s included in the service?',  a: 'Childcare, help with meals, and age-appropriate activities. Everything is agreed in advance based on your specific needs.' },
+        { q: '💰 How much does it cost?',           a: 'Price depends on timing, number of children, duration and location. Send us a request and we\'ll give you a concrete quote with no obligation.' },
+        { q: '⚡ Can you arrange same-day care?',   a: 'Yes! For urgent care we can find a sitter on short notice. Message us now and we\'ll sort it out together.' },
+        { q: '🌙 Do you work nights?',              a: 'Yes, we have sitters available for overnight shifts — ideal for newborns or parents working night shifts.' }
+      ]
     },
-    {
-      q: '🛡️ Kako proveravate dadilje?',
-      a: 'Svaka dadilja prolazi kroz proveru dokumenata i referenci, lični razgovor i testni period. Sarađujemo isključivo sa pouzdanim i iskusnim osobama.'
-    },
-    {
-      q: '📍 Koje gradove pokrivate?',
-      a: 'Pokrivamo Beograd i okolinu i Novi Sad. Za ostale gradove nas kontaktirajte — trudimo se da pomognemo i van ovih lokacija.'
-    },
-    {
-      q: '✨ Šta je uključeno u uslugu?',
-      a: 'Čuvanje dece, pomoć oko obroka i edukativne igre prema uzrastu. Sve se dogovara unapred prema vašim specifičnim potrebama.'
-    },
-    {
-      q: '💰 Koliko košta čuvanje?',
-      a: 'Cena zavisi od termina, broja dece, trajanja i lokacije. Pošaljite nam upit i odmah ćemo vam dati konkretnu ponudu bez obaveze.'
-    },
-    {
-      q: '⚡ Možete li organizovati isti dan?',
-      a: 'Da! Za hitna čuvanja možemo u kratkom roku obezbediti dadilju. Pišite nam odmah i rešavamo zajedno.'
-    },
-    {
-      q: '🌙 Da li radite i noću?',
-      a: 'Da, imamo dadilje za noćna dežurstva. Idealno za novorođenčad ili roditelje koji rade u noćnoj smeni.'
+    ru: {
+      waUrl:   'https://wa.me/381613166770?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%2C%20%D0%BD%D0%B0%D1%81%20%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%B5%D1%81%D1%83%D1%8E%D1%82%20%D1%83%D1%81%D0%BB%D1%83%D0%B3%D0%B8%20BabyGuard.',
+      welcome: 'Здравствуйте! 👋 Я ассистент BabyGuard. Выберите вопрос или свяжитесь с нами напрямую.',
+      backBtn: '⬅ Ещё вопросы',
+      waBtn:   '💬 Написать в WhatsApp',
+      qa: [
+        { q: '🔍 Как работает услуга?',             a: 'Вы связываетесь с нами, описываете потребности (возраст детей, расписание, локация). Мы предлагаем проверенных нянь, вы выбираете и бронируете. Быстро и просто! 🤝' },
+        { q: '📅 Есть ли свободные няни?',          a: 'Доступность зависит от локации и времени. Для актуальных свободных мест — напишите нам напрямую, ответим в течение нескольких минут.' },
+        { q: '🛡️ Как вы проверяете нянь?',          a: 'Каждая няня проходит проверку документов и рекомендаций, личное собеседование и испытательный срок. Мы работаем только с надёжными и опытными людьми.' },
+        { q: '📍 Какие города вы охватываете?',     a: 'Мы работаем в Белграде и окрестностях, а также в Нови-Саде. Для других городов свяжитесь с нами — постараемся помочь.' },
+        { q: '✨ Что входит в услугу?',              a: 'Присмотр за детьми, помощь с едой и развивающие игры по возрасту. Всё согласовывается заранее под ваши конкретные потребности.' },
+        { q: '💰 Сколько стоит услуга?',            a: 'Цена зависит от времени, количества детей, продолжительности и локации. Отправьте нам запрос, и мы сразу дадим конкретное предложение без обязательств.' },
+        { q: '⚡ Можно ли организовать в тот же день?', a: 'Да! Для срочного присмотра мы можем найти няню в короткие сроки. Пишите нам прямо сейчас — решим вместе.' },
+        { q: '🌙 Вы работаете ночью?',              a: 'Да, у нас есть няни для ночных дежурств. Идеально для новорождённых или родителей, работающих в ночную смену.' }
+      ]
     }
-  ];
+  };
+
+  var C   = CHAT_CONTENT[lang] || CHAT_CONTENT.sr;
+  var WA_URL = C.waUrl;
+  var QA     = C.qa;
 
   function addMsg(text, type) {
     var el = document.createElement('div');
@@ -340,12 +387,12 @@
 
     var back = document.createElement('button');
     back.className = 'chat-chip';
-    back.textContent = '⬅ Još pitanja';
+    back.textContent = C.backBtn;
     back.addEventListener('click', showMainMenu);
 
     var wa = document.createElement('button');
     wa.className = 'chat-chip wa';
-    wa.textContent = '💬 Pišite nam na WhatsApp';
+    wa.textContent = C.waBtn;
     wa.addEventListener('click', function () {
       if (typeof gtag === 'function') {
         gtag('event', 'conversion', { send_to: 'AW-18274328782/hWxfCJHN_cYcEM7B8IlE' });
@@ -370,7 +417,7 @@
     if (initiated) return;
     initiated = true;
     showTyping(function () {
-      addMsg('Zdravo! 👋 Ja sam BabyGuard asistent. Odaberite pitanje ili nas kontaktirajte direktno.', 'bot');
+    addMsg(C.welcome, 'bot');
       setTimeout(showMainMenu, 300);
     }, 600);
   }
