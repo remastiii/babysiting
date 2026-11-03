@@ -153,8 +153,14 @@ $('importFile').addEventListener('change',async e=>{
 });
 $('deleteAll').addEventListener('click',()=>{if(mutating||!shiftsReady)return;if(!shifts.length){toast('Nema smena za brisanje.');return}if(confirm('Obrisati SVE smene iz zajedničke baze? Troškovi ostaju sačuvani. Prvo izvezi rezervnu kopiju.')&&confirm('Poslednja potvrda: trajno obrisati sve smene?'))runMutation(()=>sb.rpc('restore_babyguard_backup',{backup_shifts:[],backup_expenses:null}),'Sve smene su obrisane. Troškovi su sačuvani.',resetForm)});
 let greeting='Dobro došli!';
-function userName(u){const m=u.user_metadata||{};const raw=m.display_name||m.full_name||m.name||u.email.split('@')[0].split(/[._\d-]/)[0];return raw.charAt(0).toLocaleUpperCase('sr')+raw.slice(1)}
-function showApp(session){const name=userName(session.user);greeting=`${/a$/i.test(name)?'Dobro došla':'Dobro došao'}, ${name}!`;$('authScreen').classList.add('hidden');$('app').classList.remove('hidden');$('userEmail').textContent=session.user.email;resetForm();resetExpenseForm();showPage('home');load();resetIdle()}
+function userName(u){
+  const metadata=u.user_metadata||{};
+  const profileName=[metadata.display_name,metadata.full_name,metadata.name].find(value=>typeof value==='string'&&value.trim());
+  const emailName=String(u.email||'').split('@')[0].replace(/^\d+/,'').split(/[._\d-]/)[0];
+  const raw=profileName?profileName.trim():emailName;
+  return raw.charAt(0).toLocaleUpperCase('sr')+raw.slice(1);
+}
+function showApp(session){const name=userName(session.user);greeting=name?`${/a$/i.test(name)?'Dobro došla':'Dobro došao'}, ${name}!`:'Dobro došli!';$('authScreen').classList.add('hidden');$('app').classList.remove('hidden');$('userEmail').textContent=session.user.email;resetForm();resetExpenseForm();showPage('home');load();resetIdle()}
 function showLogin(){++loadEpoch;shifts=[];expenses=[];shiftsReady=false;expensesReady=false;resetForm();resetExpenseForm();['homeMonth','statsMonth','search','monthFilter','sitterFilter','typeFilter','expenseSearch','expenseMonthFilter','expenseCategoryFilter','expensePaymentFilter'].forEach(id=>$(id).value='');render();$('dataStatus').hidden=true;$('userEmail').textContent='';$('app').classList.add('hidden');$('authScreen').classList.remove('hidden')}
 $('loginForm').addEventListener('submit',async e=>{e.preventDefault();$('loginError').textContent='';$('loginBtn').disabled=true;const{data,error}=await sb.auth.signInWithPassword({email:$('loginEmail').value.trim(),password:$('loginPassword').value});$('loginBtn').disabled=false;$('loginPassword').value='';if(error){$('loginError').textContent='Pogrešan email ili lozinka.';return}showApp(data.session)});
 $('logoutBtn').addEventListener('click',async()=>{if(!confirm('Odjaviti se sa SVIH uređaja?'))return;await sb.auth.signOut({scope:'global'});showLogin()});

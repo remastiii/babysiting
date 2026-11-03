@@ -12,7 +12,8 @@ const sampleShift = { id: 's1', date: '2026-11-02', family: 'Test', sitter: 'Tes
 const sampleExpense = { id: 'e1', date: '2026-11-02', title: 'Domen', category: 'domen_hosting', amount: 1000,
   payment_method: 'kartica', description: null, created: '2026-11-02T10:00:00Z' };
 
-async function app({ shifts = [sampleShift], expenses = [sampleExpense], expenseError = false } = {}) {
+async function app({ shifts = [sampleShift], expenses = [sampleExpense], expenseError = false,
+  user = { email: 'test@example.com', user_metadata: {} } } = {}) {
   const elements = new Map();
   const calls = [];
   const db = { shifts: structuredClone(shifts), expenses: structuredClone(expenses) };
@@ -72,7 +73,7 @@ async function app({ shifts = [sampleShift], expenses = [sampleExpense], expense
     if (payload.backup_expenses !== null) db.expenses = payload.backup_expenses;
     return { data: {}, error: null };
   }, auth: {
-    getSession: async () => ({ data: { session: { user: { email: 'test@example.com', user_metadata: {} } } } }),
+    getSession: async () => ({ data: { session: { user } } }),
     onAuthStateChange: callback => { listeners.auth = callback; }, signOut: async () => { listeners.auth('SIGNED_OUT'); }
   } };
   const document = { getElementById: element, querySelectorAll: () => [],
@@ -161,4 +162,16 @@ test('logout clears expense data, edit forms and filters from memory and screen'
   assert.equal(a.element('expenseSearch').value, '');
   assert.equal(a.run('expenses.length'), 0);
   assert.equal(a.element('app').classList.contains('hidden'), true);
+});
+
+test('greeting prefers the profile name and handles emails starting with digits', async () => {
+  for (const [user, expected] of [
+    [{ email: '1markotest@example.com', user_metadata: { display_name: ' Marko ' } }, 'Dobro došao, Marko!'],
+    [{ email: 'anatest@example.com', user_metadata: { display_name: 'Ana' } }, 'Dobro došla, Ana!'],
+    [{ email: '1marko.test@example.com', user_metadata: {} }, 'Dobro došao, Marko!'],
+    [{ email: '123@example.com', user_metadata: {} }, 'Dobro došli!']
+  ]) {
+    const a = await app({ user });
+    assert.equal(a.element('pageTitle').textContent, expected);
+  }
 });
