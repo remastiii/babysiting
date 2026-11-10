@@ -12,7 +12,7 @@
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#ff6b8b" />
+  <meta name="theme-color" content="#faf9f7" />
 
   <title>Blog – Saveti za roditelje | BabyGuard Beograd</title>
   <meta name="description" content="Korisni tekstovi o bebisitovanju, čuvanju dece i roditeljstvu u Beogradu. Saveti od BabyGuard tima za svakodnevne situacije." />
@@ -52,120 +52,132 @@
   </script>
 </head>
 
-<body>
-  <header class="mobile-header">
-    <div class="logo-container">
-      <a href="/" class="logo-link">
-        <span class="logo-icon"></span>
-        <span class="logo-text">👶BabyGuard🛡️</span>
-        <span class="logo-icon"></span>
-      </a>
-    </div>
+<body class="blog-page">
+  <header class="site-header" id="vrh">
+    <div class="header-inner">
 
-    <div class="lang-dropdown mobile-lang">
-      <button class="lang-dropdown-btn" aria-label="Promeni jezik">
-        <span class="lang-icon">🇷🇸</span>
-        <span class="lang-arrow">▾</span>
-      </button>
-      <div class="lang-dropdown-content">
-        <a href="/" hreflang="sr" class="active-lang">🇷🇸 Srpski</a>
-        <a href="/en.html" hreflang="en">🇬🇧 English</a>
-        <a href="/ru.html" hreflang="ru">🇷🇺 Русский</a>
+      <a href="/" class="site-logo" aria-label="BabyGuard – početna strana">
+        <span class="site-logo__mark" aria-hidden="true">BG</span>
+        <span class="site-logo__name">BabyGuard</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Glavna navigacija">
+        <ul>
+          <li><a href="/#o-nama">O nama</a></li>
+          <li><a href="/#usluge">Usluge</a></li>
+          <li><a href="/#dadilje">Dadilje</a></li>
+          <li><a href="/#hoteli">Hoteli</a></li>
+          <li><a href="/#faq">FAQ</a></li>
+          <li><a href="/blog/" aria-current="page">Blog</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Language dropdown – desktop -->
+        <div class="lang-dropdown">
+          <button class="lang-btn" aria-label="Promeni jezik" aria-expanded="false">
+            <span>🇷🇸</span>
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="lang-menu" role="list">
+            <a href="/" hreflang="sr" class="lang-item" role="listitem">🇷🇸 Srpski</a>
+            <a href="/en.html" hreflang="en" class="lang-item" role="listitem">🇬🇧 English</a>
+            <a href="/ru.html" hreflang="ru" class="lang-item" role="listitem">🇷🇺 Русский</a>
+          </div>
+        </div>
+
+        <a href="/#zaposljavanje" class="btn-ghost nav-careers">Postani dadilja</a>
+
+        <button class="btn-primary"
+          onclick="gtag('event','conversion',{'send_to':'AW-18274328782/hWxfCJHN_cYcEM7B8IlE'}); window.open('https://wa.me/381613166770?text=Pozdrav%2C%20zainteresovani%20smo%20za%20BabyGuard%20usluge%20%C4%8Duvanja%20dece%2C%20molimo%20vas%20dajte%20nam%20vi%C5%A1e%20informacija.%20Imamo%20decu%20od%20___%20uzrasta.', '_blank')">
+          Pronađi dadilju
+        </button>
+
+        <button class="hamburger" aria-controls="mobile-navigation" aria-label="Otvori meni" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
 
-    <button class="menu-toggle" aria-label="Toggle menu">
-      <span class="bar"></span>
-      <span class="bar"></span>
-      <span class="bar"></span>
-    </button>
-
-    <nav class="nav-menu">
+    <!-- Mobile nav panel -->
+    <div class="mobile-nav" id="mobile-navigation" aria-hidden="true" inert>
       <ul>
         <li><a href="/#o-nama">O nama</a></li>
         <li><a href="/#usluge">Usluge</a></li>
-        <li><a href="/#cenovnik">Cenovnik</a></li>
+        <li><a href="/#dadilje">Dadilje</a></li>
         <li><a href="/#hoteli">Hoteli</a></li>
-        <li><a href="/#kontakt">Kontakt</a></li>
-        <li><a href="/#zaposljavanje">Zaposljavanje</a></li>
         <li><a href="/#faq">FAQ</a></li>
-        <li><a href="/blog/" class="active-nav">Blog</a></li>
-
-        <li class="desktop-lang-item">
-          <div class="lang-dropdown">
-            <button class="lang-dropdown-btn" aria-label="Promeni jezik">
-              <span class="lang-icon">🇷🇸</span>
-              <span class="lang-arrow">▾</span>
-            </button>
-            <div class="lang-dropdown-content">
-              <a href="/" hreflang="sr" class="active-lang">🇷🇸 Srpski</a>
-              <a href="/en.html" hreflang="en">🇬🇧 English</a>
-              <a href="/ru.html" hreflang="ru">🇷🇺 Русский</a>
-            </div>
+        <li><a href="/blog/" aria-current="page">Blog</a></li>
+        <li><a href="/#zaposljavanje" class="nav-careers">Postani dadilja</a></li>
+        <li>
+          <div class="mobile-lang">
+            <a href="/" hreflang="sr">🇷🇸 SR</a>
+            <a href="/en.html" hreflang="en">🇬🇧 EN</a>
+            <a href="/ru.html" hreflang="ru">🇷🇺 RU</a>
           </div>
         </li>
       </ul>
-    </nav>
+    </div>
   </header>
 
   <main>
-    <div class="page-hero animated-section">
+    <div class="page-hero">
       <h1>Blog – Saveti za roditelje</h1>
       <p>Korisni tekstovi o čuvanju dece, bebisitovanju i roditeljstvu u Beogradu — od našeg tima, za vas.</p>
     </div>
 
     <div class="blog-grid">
 
-      <article class="blog-card animated-section">
+      <article class="blog-card">
         <p class="blog-card-date">15. april 2025.</p>
         <h2>Kako izabrati pouzdanu bebisiterku u Beogradu — checklist za roditelje</h2>
         <p>Pronalazak osobe kojoj ćete poveriti dete nije lak. Objašnjavamo na šta obratiti pažnju, kako proveriti reference i šta pitati pre angažovanja.</p>
         <a href="kako-izabrati-bebisiterku.html" class="btn-read-more">Pročitaj više →</a>
       </article>
 
-      <article class="blog-card animated-section">
+      <article class="blog-card">
         <p class="blog-card-date">3. maj 2025.</p>
         <h2>10 pitanja koja treba postaviti bebisiterki pre prvog angažovanja</h2>
         <p>Pre nego što ostavite dete, ovaj razgovor je obavezan. Ova pitanja pomažu da procenite iskustvo, pristup i pouzdanost bebisiterke.</p>
         <a href="10-pitanja-za-bebisiterku.html" class="btn-read-more">Pročitaj više →</a>
       </article>
 
-      <article class="blog-card animated-section">
+      <article class="blog-card">
         <p class="blog-card-date">22. maj 2025.</p>
         <h2>Noćno čuvanje novorođenčadi — na šta obratiti pažnju</h2>
         <p>Novorođenče traži posebnu pažnju noću. Šta mora da zna bebisiterka za noćni angažman i kako se roditelji mogu potpuno odmoriti?</p>
         <a href="nocno-cuvanje-novorodjencadi.html" class="btn-read-more">Pročitaj više →</a>
       </article>
 
-      <article class="blog-card animated-section">
+      <article class="blog-card">
         <p class="blog-card-date">10. jun 2025.</p>
         <h2>Bebisiterka ili vrtić — kako doneti pravu odluku za vašu porodicu</h2>
         <p>Dve opcije, različite potrebe. Poredimo troškove, fleksibilnost, socijalizaciju i sve što je važno kada birate između bebisiterke i vrtića.</p>
         <a href="bebisiterka-ili-vrtic.html" class="btn-read-more">Pročitaj više →</a>
       </article>
 
-      <article class="blog-card animated-section">
+      <article class="blog-card">
         <p class="blog-card-date">5. jul 2025.</p>
         <h2>Igre i aktivnosti po uzrastu koje bebisiterke rade sa decom</h2>
         <p>Dobra bebisiterka ne "čuva" dete, nego se igra s njim. Evo konkretnih aktivnosti za bebe, malu decu i predškolce koje koriste naše bebisiterke.</p>
         <a href="igre-po-uzrastu.html" class="btn-read-more">Pročitaj više →</a>
       </article>
 
-      <article class="blog-card animated-section">
+      <article class="blog-card">
         <p class="blog-card-date">28. jul 2025.</p>
         <h2>Bebisitovanje na putovanjima — šta dogovoriti unapred</h2>
         <p>Ako planiraš odmor sa bebisiterkom ili trebaš nekoga za hotelski boravak u Beogradu, evo svega što treba da razgovorite pre polaska.</p>
         <a href="bebisitovanje-na-putovanjima.html" class="btn-read-more">Pročitaj više →</a>
       </article>
 
-      <article class="blog-card animated-section">
-        <p class="blog-card-date">15. august 2025.</p>
+      <article class="blog-card">
+        <p class="blog-card-date">15. avgust 2025.</p>
         <h2>Kako pripremiti dete (i sebe) za prvi susret sa bebisiterkom</h2>
         <p>Mnoga deca prolaze kroz anksioznost pri separaciji. Praktičan vodič za roditelje kako da prvi susret prođe glatko, za dete i odrasle.</p>
         <a href="prvi-susret-sa-bebisiterkom.html" class="btn-read-more">Pročitaj više →</a>
       </article>
 
-      <article class="blog-card animated-section">
+      <article class="blog-card">
         <p class="blog-card-date">2. septembar 2025.</p>
         <h2>Hitno čuvanje dece — kada je stvarno hitno i kako brzo reagovati</h2>
         <p>Posao, bolnica, neočekivana obaveza — ponekad nema vremena za planiranje. Šta je hitno bebisitovanje i kako BabyGuard dolazi za 60 minuta.</p>
@@ -176,43 +188,37 @@
   </main>
 
   <footer class="site-footer">
-    <p>&copy; 2025 BabyGuard – Profesionalno bebisitovanje/čuvanje. Sva prava zadržana.</p>
-    <p>Beograd, Srbija | 📞 +381 61 316 6770</p>
-    <div class="social-icons" style="margin-top: 12px;">
-      <a href="https://www.instagram.com/babyguard.rs" target="_blank" aria-label="BabyGuard na Instagramu"
-        style="margin: 0 8px; display: inline-block; color: inherit; text-decoration: none;">
-        <svg class="social-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:#666;">
-          <path d="M16.98 2H7.02C4.25 2 2 4.25 2 7.02V16.98C2 19.75 4.25 22 7.02 22H16.98C19.75 22 22 19.75 22 16.98V7.02C22 4.25 19.75 2 16.98 2ZM20 16.98C20 18.64 18.64 20 16.98 20H7.02C5.36 20 4 18.64 4 16.98V7.02C4 5.36 5.36 4 7.02 4H16.98C18.64 4 20 5.36 20 7.02V16.98Z" fill="currentColor"/>
-          <path d="M12 7C9.239 7 7 9.239 7 12C7 14.761 9.239 17 12 17C14.761 17 17 14.761 17 12C17 9.239 14.761 7 12 7ZM12 15C10.346 15 9 13.654 9 12C9 10.346 10.346 9 12 9C13.654 9 15 10.346 15 12C15 13.654 13.654 15 12 15Z" fill="currentColor"/>
-          <path d="M17.25 6.75C17.664 6.75 18 6.414 18 6C18 5.586 17.664 5.25 17.25 5.25C16.836 5.25 16.5 5.586 16.5 6C16.5 6.414 16.836 6.75 17.25 6.75Z" fill="currentColor"/>
-        </svg>
-      </a>
-      <a href="mailto:babyguard0@gmail.com" aria-label="Pošalji email"
-        style="margin: 0 8px; display: inline-block; color: inherit; text-decoration: none;">
-        <svg class="social-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:#666;">
-          <path d="M20 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4Z" fill="currentColor"/>
-          <path d="M4 6L12 12L20 6V8L12 14L4 8V6Z" fill="#ffffff"/>
-        </svg>
-      </a>
-      <a href="https://wa.me/381613166770" target="_blank" aria-label="WhatsApp"
-        style="margin: 0 8px; display: inline-block; color: inherit; text-decoration: none;">
-        <svg class="social-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:#666;">
-          <path d="M12.04 2C6.51 2 2.04 6.477 2.04 12C2.04 13.93 2.59 15.74 3.54 17.28L2 22L6.86 20.53C8.33 21.35 10.02 21.8 12.04 21.8C17.56 21.8 22.04 17.323 22.04 11.8C22.04 6.277 17.56 2 12.04 2ZM16.8 14.64C16.61 15.15 15.87 15.57 15.38 15.65C14.95 15.72 14.41 15.75 12.57 14.97C10.01 13.91 8.37 10.94 8.24 10.75C8.11 10.56 7.18 9.33 7.18 8.08C7.18 6.83 7.84 6.23 8.07 5.99C8.3 5.75 8.57 5.69 8.74 5.69C8.9 5.69 9.07 5.69 9.2 5.7C9.34 5.7 9.53 5.66 9.72 6.09C9.92 6.56 10.38 7.8 10.44 7.92C10.5 8.05 10.53 8.19 10.45 8.33C10.38 8.48 10.34 8.56 10.23 8.68C10.12 8.81 10 8.95 9.9 9.06C9.8 9.17 9.7 9.29 9.82 9.53C9.94 9.77 10.35 10.45 10.97 11C11.78 11.78 12.48 11.99 12.73 12.09C12.98 12.19 13.14 12.19 13.3 12.01C13.46 11.83 13.99 11.22 14.16 10.95C14.34 10.68 14.52 10.73 14.76 10.82C15 10.91 16.33 11.56 16.6 11.68C16.87 11.8 17.05 11.87 17.12 11.98C17.18 12.09 17.18 12.58 16.8 14.64Z" fill="currentColor"/>
-        </svg>
-      </a>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="/" class="footer-logo">BabyGuard</a>
+        <p>Profesionalne dadilje u Beogradu — 24/7, na poziv.</p>
+      </div>
+      <nav class="footer-nav" aria-label="Footer navigacija">
+        <a href="/#o-nama">O nama</a>
+        <a href="/#usluge">Usluge</a>
+        <a href="/#hoteli">Hoteli</a>
+        <a href="/#zaposljavanje">Karijera</a>
+        <a href="/#faq">FAQ</a>
+        <a href="/blog/">Blog</a>
+      </nav>
+      <div class="footer-contact">
+        <a href="tel:+381613166770">+381 61 316 6770</a>
+        <a href="mailto:babyguard0@gmail.com">babyguard0@gmail.com</a>
+        <a href="https://www.instagram.com/babyguard.rs" target="_blank" rel="noopener noreferrer" aria-label="BabyGuard na Instagramu">Instagram</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 BabyGuard – Profesionalno bebisitovanje/čuvanje dece u Beogradu. Sva prava zadržana.</p>
     </div>
   </footer>
 
   <!-- Floating WhatsApp -->
-  <div id="whatsapp-float" onclick="gtag('event','conversion',{'send_to':'AW-18274328782/hWxfCJHN_cYcEM7B8IlE'}); window.open('https://wa.me/381613166770?text=Pozdrav%2C%20zainteresovani%20smo%20za%20BabyGuard%20usluge%20%C4%8Duvanja%20dece.','_blank')">
-    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.51 2 2.04 6.477 2.04 12C2.04 13.93 2.59 15.74 3.54 17.28L2 22L6.86 20.53C8.33 21.35 10.02 21.8 12.04 21.8C17.56 21.8 22.04 17.323 22.04 11.8C22.04 6.277 17.56 2 12.04 2ZM16.8 14.64C16.61 15.15 15.87 15.57 15.38 15.65C14.95 15.72 14.41 15.75 12.57 14.97C10.01 13.91 8.37 10.94 8.24 10.75C8.11 10.56 7.18 9.33 7.18 8.08C7.18 6.83 7.84 6.23 8.07 5.99C8.3 5.75 8.57 5.69 8.74 5.69C8.9 5.69 9.07 5.69 9.2 5.7C9.34 5.7 9.53 5.66 9.72 6.09C9.92 6.56 10.38 7.8 10.44 7.92C10.5 8.05 10.53 8.19 10.45 8.33C10.38 8.48 10.34 8.56 10.23 8.68C10.12 8.81 10 8.95 9.9 9.06C9.8 9.17 9.7 9.29 9.82 9.53C9.94 9.77 10.35 10.45 10.97 11C11.78 11.78 12.48 11.99 12.73 12.09C12.98 12.19 13.14 12.19 13.3 12.01C13.46 11.83 13.99 11.22 14.16 10.95C14.34 10.68 14.52 10.73 14.76 10.82C15 10.91 16.33 11.56 16.6 11.68C16.87 11.8 17.05 11.87 17.12 11.98C17.18 12.09 17.18 12.58 16.8 14.64Z"/></svg>
-  </div>
-  <style>
-    #whatsapp-float { position:fixed; width:60px; height:60px; bottom:25px; right:25px; background:#25D366; color:white; border-radius:50%; display:flex; justify-content:center; align-items:center; cursor:pointer; z-index:1000; box-shadow:0 4px 20px rgba(37,211,102,.4); transition:all .3s ease; }
-    #whatsapp-float:hover { transform:scale(1.1); }
-    #whatsapp-float svg { width:35px; height:35px; }
-  </style>
+  <a id="whatsapp-float" href="https://wa.me/381613166770" target="_blank" rel="noopener noreferrer" aria-label="Kontaktirajte BabyGuard putem WhatsApp-a">
+    <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28" aria-hidden="true">
+      <path d="M12.04 2C6.51 2 2.04 6.477 2.04 12C2.04 13.93 2.59 15.74 3.54 17.28L2 22L6.86 20.53C8.33 21.35 10.02 21.8 12.04 21.8C17.56 21.8 22.04 17.323 22.04 11.8C22.04 6.277 17.56 2 12.04 2ZM16.8 14.64C16.61 15.15 15.87 15.57 15.38 15.65C14.95 15.72 14.41 15.75 12.57 14.97C10.01 13.91 8.37 10.94 8.24 10.75C8.11 10.56 7.18 9.33 7.18 8.08C7.18 6.83 7.84 6.23 8.07 5.99C8.3 5.75 8.57 5.69 8.74 5.69C8.9 5.69 9.07 5.69 9.2 5.7C9.34 5.7 9.53 5.66 9.72 6.09C9.92 6.56 10.38 7.8 10.44 7.92C10.5 8.05 10.53 8.19 10.45 8.33C10.38 8.48 10.34 8.56 10.23 8.68C10.12 8.81 10 8.95 9.9 9.06C9.8 9.17 9.7 9.29 9.82 9.53C9.94 9.77 10.35 10.45 10.97 11C11.78 11.78 12.48 11.99 12.73 12.09C12.98 12.19 13.14 12.19 13.3 12.01C13.46 11.83 13.99 11.22 14.16 10.95C14.34 10.68 14.52 10.73 14.76 10.82C15 10.91 16.33 11.56 16.6 11.68C16.87 11.8 17.05 11.87 17.12 11.98C17.18 12.09 17.18 12.58 16.8 14.64Z"/>
+    </svg>
+  </a>
 
-  <script src="blog.js"></script>
+  <script src="../navigation.js"></script>
 </body>
 </html>

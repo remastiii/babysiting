@@ -37,6 +37,7 @@ remove them individually after testing. No changes are pushed or deployed by thi
 
 ```powershell
 node --test tests/expenses.test.mjs tests/app.test.mjs
+node --test tests/site-navigation.test.mjs
 node --check evidencija/app.js
 ```
 

@@ -188,21 +188,21 @@
           </div>
         </div>
 
-        <a href="#zaposljavanje" class="btn-ghost">Postani dadilja</a>
+        <a href="#zaposljavanje" class="btn-ghost nav-careers">Postani dadilja</a>
 
         <button class="btn-primary"
           onclick="gtag('event','conversion',{'send_to':'AW-18274328782/hWxfCJHN_cYcEM7B8IlE'}); window.open('https://wa.me/381613166770?text=Pozdrav%2C%20zainteresovani%20smo%20za%20BabyGuard%20usluge%20%C4%8Duvanja%20dece%2C%20molimo%20vas%20dajte%20nam%20vi%C5%A1e%20informacija.%20Imamo%20decu%20od%20___%20uzrasta.', '_blank')">
           Pronađi dadilju
         </button>
 
-        <button class="hamburger" aria-label="Otvori meni" aria-expanded="false">
+        <button class="hamburger" aria-controls="mobile-navigation" aria-label="Otvori meni" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
       </div>
     </div>
 
     <!-- Mobile nav panel -->
-    <div class="mobile-nav" aria-hidden="true">
+    <div class="mobile-nav" id="mobile-navigation" aria-hidden="true" inert>
       <ul>
         <li><a href="#o-nama">O nama</a></li>
         <li><a href="#usluge">Usluge</a></li>
@@ -210,7 +210,7 @@
         <li><a href="#hoteli">Hoteli</a></li>
         <li><a href="#faq">FAQ</a></li>
         <li><a href="/blog/">Blog</a></li>
-        <li><a href="#zaposljavanje">Postani dadilja</a></li>
+        <li><a href="#zaposljavanje" class="nav-careers">Postani dadilja</a></li>
         <li>
           <div class="mobile-lang">
             <a href="/" hreflang="sr" class="active">🇷🇸 SR</a>
@@ -775,6 +775,7 @@
     </svg>
   </button>
 
+  <script src="navigation.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

@@ -1,59 +1,9 @@
 ﻿/* ================================================================
    BabyGuard – Main page JS
    script.js  |  branch: feature/babyguard-premium-redesign
-   Blog pages use blog/blog.js — this file is for index.html only.
+   Navigation is shared via navigation.js; this file handles home-page features.
 ================================================================ */
 'use strict';
-
-/* ---------------------------------------------------------------
-   1. HAMBURGER – toggle mobile nav panel
---------------------------------------------------------------- */
-(function () {
-  var hamburger = document.querySelector('.hamburger');
-  var mobileNav = document.querySelector('.mobile-nav');
-  if (!hamburger || !mobileNav) return;
-
-  hamburger.addEventListener('click', function () {
-    var isOpen = mobileNav.classList.toggle('open');
-    hamburger.classList.toggle('open', isOpen);
-    hamburger.setAttribute('aria-expanded', String(isOpen));
-  });
-
-  // Close on mobile nav link click
-  mobileNav.querySelectorAll('a').forEach(function (link) {
-    link.addEventListener('click', function () {
-      mobileNav.classList.remove('open');
-      hamburger.classList.remove('open');
-      hamburger.setAttribute('aria-expanded', 'false');
-    });
-  });
-})();
-
-/* ---------------------------------------------------------------
-   2. LANGUAGE DROPDOWN – click-based (touch friendly)
---------------------------------------------------------------- */
-(function () {
-  var dropdown = document.querySelector('.header-actions .lang-dropdown');
-  if (!dropdown) return;
-
-  var btn = dropdown.querySelector('.lang-btn');
-  if (!btn) return;
-
-  btn.addEventListener('click', function (e) {
-    e.stopPropagation();
-    dropdown.classList.toggle('open');
-  });
-
-  document.addEventListener('click', function (e) {
-    if (!dropdown.contains(e.target)) {
-      dropdown.classList.remove('open');
-    }
-  });
-
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') dropdown.classList.remove('open');
-  });
-})();
 
 /* ---------------------------------------------------------------
    3. SMOOTH SCROLL – subtract sticky header height
