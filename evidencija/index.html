@@ -54,39 +54,37 @@
     <div class="grid">
       <div class="stack">
         <div class="panel" id="formPanel">
-          <div class="panel-head"><div><h2 id="formTitle">＋ Dodaj smenu ili spajanje</h2><div class="sub">Unesi smenu ili naplaćenu proviziju za dugoročno čuvanje.</div></div></div>
+          <div class="panel-head"><div><h2 id="formTitle">＋ Dodaj smenu ili spajanje</h2><div class="sub">Unesi smenu ili dodatnu zaradu od spajanja porodice i dadilje.</div></div></div>
           <form id="shiftForm">
             <input type="hidden" id="editId">
             <div class="form-grid">
               <div class="field"><label for="date">Datum naplate / smene *</label><input id="date" type="date" required></div>
               <div class="field"><label for="family">Porodica / oznaka *</label><input id="family" list="families" placeholder="npr. Porodica Petrović" required maxlength="100"><datalist id="families"></datalist></div>
               <div class="field"><label for="sitter">Dadilja *</label><input id="sitter" list="sitters" placeholder="Ime dadilje" required maxlength="100"><datalist id="sitters"></datalist></div>
-              <div class="field"><label for="shiftType">Vrsta unosa *</label><select id="shiftType" required><option value="povremeno">Povremeno čuvanje</option><option value="nocno">Noćno čuvanje</option><option value="hotelsko">Hotelsko čuvanje</option><option value="hitno">Hitno čuvanje</option><option value="proslave">Čuvanje na proslavama</option><option value="spajanje">Spajanje porodice i dadilje</option></select></div>
+              <div class="field"><label for="shiftType">Vrsta unosa *</label><select id="shiftType" required><option value="povremeno">Povremeno čuvanje</option><option value="nocno">Noćno čuvanje</option><option value="hotelsko">Hotelsko čuvanje</option><option value="hitno">Hitno čuvanje</option><option value="proslave">Čuvanje na proslavama</option><option value="spajanje">Dodatna zarada od spajanja</option></select></div>
               <div class="field" id="hoursField"><label for="hours">Broj sati *</label><input id="hours" type="number" min="0.25" max="100" step="0.25" placeholder="3" required></div>
-              <div class="field" id="commissionBaseField" hidden><label for="commissionBase">Osnovica za proviziju (RSD) *</label><input id="commissionBase" type="number" min="0.01" max="9999999999.99" step="0.01" placeholder="npr. 80000" disabled></div>
-              <div class="field" id="commissionPercentField" hidden><label for="commissionPercent">Provizija (%) *</label><input id="commissionPercent" type="number" min="0.01" max="100" step="0.01" placeholder="npr. 20" disabled></div>
               <div class="field"><label for="charged" id="chargedLabel">Cena naplaćena (RSD) *</label><input id="charged" type="number" min="0" step="0.01" placeholder="3500" required></div>
               <div class="field" id="paidField"><label for="paid">Isplata dadilji (RSD) *</label><input id="paid" type="number" min="0" step="0.01" placeholder="2100" required></div>
-              <div class="sub span3" id="commissionHelp" hidden>Dugoročno čuvanje: naplaćuje se samo usluga spajanja. Provizija = osnovica × procenat / 100. Ceo iznos je profit; nema sati ni isplate dadilji.</div>
+              <div class="sub span3" id="commissionHelp" hidden>Upiši koliko ste naplatili za spajanje porodice i dadilje. Ceo iznos ulazi u prihod i profit; nema sati ni isplate dadilji.</div>
               <div class="field span3"><label for="description">Opis / napomena (opciono)</label><textarea id="description" maxlength="500" placeholder="Dodatne informacije o smeni…"></textarea></div>
               <div class="span3 profit-preview"><span id="profitLabel">Profit od ove smene (naplaćeno − isplaćeno)</span><strong id="profitPreview" aria-live="polite">0 RSD</strong></div>
             </div>
             <div class="actions"><button type="button" class="btn" id="cancelEdit" hidden>Otkaži izmenu</button><button type="reset" class="btn" id="clearForm">Očisti</button><button type="submit" class="btn primary" id="saveBtn">Sačuvaj smenu</button></div>
           </form>
-          <div class="note">Evidentiraj završene smene ili naplaćene provizije od spajanja. Kod spajanja osnovica služi samo za obračun procenta i ne ulazi u prihod; prihod je samo naplaćena provizija.</div>
+          <div class="note">Evidentiraj završene smene ili naplaćenu dodatnu zaradu od spajanja. Iznos zarade od spajanja unosiš ručno.</div>
         </div>
         <div class="panel"><div class="panel-head"><div><h2>Poslednji unosi</h2><div class="sub">Najnovije evidentirane usluge</div></div><button class="text-btn" data-goto="shifts">Pogledaj sve →</button></div><div class="table-wrap"><table><thead><tr><th>Datum</th><th>Porodica</th><th>Dadilja</th><th>Vrsta</th><th class="num">Sati</th><th class="num">Naplaćeno</th><th class="num">Isplaćeno</th><th class="num">Profit</th><th></th></tr></thead><tbody id="recentRows"></tbody></table><div class="empty" id="recentEmpty">Još nema unetih smena. Dodaj prvu smenu iz forme iznad.</div></div></div>
       </div>
       <div class="stack">
         <div class="panel"><div class="panel-head"><div><h2>Poslovanje po mesecima</h2><div class="sub">Poslednjih šest meseci sa uslugama ili troškovima · RSD</div></div></div><div class="legend"><span><i class="dot" style="background:var(--mint)"></i>Naplaćeno</span><span><i class="dot" style="background:var(--blue)"></i>Isplaćeno dadiljama</span><span><i class="dot" style="background:#bd7854"></i>Troškovi</span><span><i class="dot" style="background:var(--purple)"></i>Rezultat posle troškova</span></div><div class="chart" id="chart" role="img" aria-label="Mesečni finansijski pregled u RSD"></div><div class="chart-foot" id="chartFoot">Rezultat ispod nulte linije označava gubitak.</div></div>
         <div class="panel"><div class="panel-head"><div><h2>Brzi uvidi</h2><div class="sub">Na osnovu smena i spajanja</div></div></div><div class="insights" id="insights"></div></div>
-        <div class="panel"><div class="panel-head"><div><h2>Kako se računa rezultat</h2></div></div><div class="sub">Profit od usluga = naplaćene smene − isplate dadiljama + provizije od spajanja. Spajanja se ne računaju kao smene ili sati. Rezultat posle troškova = profit od usluga − evidentirani poslovni troškovi. Porezi i drugi izdaci ulaze u rezultat samo ako ih uneseš kao trošak.</div></div>
+        <div class="panel"><div class="panel-head"><div><h2>Kako se računa rezultat</h2></div></div><div class="sub">Profit od usluga = naplaćene smene − isplate dadiljama + zarada od spajanja. Spajanja se ne računaju kao smene ili sati. Rezultat posle troškova = profit od usluga − evidentirani poslovni troškovi. Porezi i drugi izdaci ulaze u rezultat samo ako ih uneseš kao trošak.</div></div>
       </div>
     </div>
   </section>
   <section id="shifts" class="page">
     <div class="panel"><div class="panel-head"><div><h2>Smene i spajanja</h2><div class="sub">Pretraži, filtriraj, izmeni ili obriši evidenciju.</div></div><div class="small-actions"><button class="btn" id="exportCsv">Izvezi CSV</button><button class="btn primary" id="newShift">＋ Novi unos</button></div></div>
-      <div class="filters"><input id="search" placeholder="Pretraži porodicu ili dadilju…"><input id="monthFilter" type="month" aria-label="Filtriraj po mesecu"><select id="sitterFilter"><option value="">Sve dadilje</option></select><select id="typeFilter" aria-label="Filtriraj po vrsti unosa"><option value="">Sve vrste</option><option value="povremeno">Povremeno čuvanje</option><option value="nocno">Noćno čuvanje</option><option value="hotelsko">Hotelsko čuvanje</option><option value="hitno">Hitno čuvanje</option><option value="proslave">Čuvanje na proslavama</option><option value="spajanje">Spajanje porodice i dadilje</option></select><button class="btn" id="clearFilters">Resetuj filtere</button></div>
+      <div class="filters"><input id="search" placeholder="Pretraži porodicu ili dadilju…"><input id="monthFilter" type="month" aria-label="Filtriraj po mesecu"><select id="sitterFilter"><option value="">Sve dadilje</option></select><select id="typeFilter" aria-label="Filtriraj po vrsti unosa"><option value="">Sve vrste</option><option value="povremeno">Povremeno čuvanje</option><option value="nocno">Noćno čuvanje</option><option value="hotelsko">Hotelsko čuvanje</option><option value="hitno">Hitno čuvanje</option><option value="proslave">Čuvanje na proslavama</option><option value="spajanje">Dodatna zarada od spajanja</option></select><button class="btn" id="clearFilters">Resetuj filtere</button></div>
       <div class="table-wrap"><table><thead><tr><th>Datum</th><th>Porodica</th><th>Dadilja</th><th>Vrsta</th><th class="num">Sati</th><th class="num">Naplaćeno</th><th class="num">Isplaćeno</th><th class="num">Profit</th><th>Napomena</th><th>Akcije</th></tr></thead><tbody id="allRows"></tbody></table><div class="empty" id="allEmpty">Nema smena koje odgovaraju filterima.</div></div><div class="note" id="filteredTotals"></div>
     </div>
   </section>

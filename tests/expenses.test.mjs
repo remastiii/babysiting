@@ -75,14 +75,14 @@ test('default date uses the device calendar, including near midnight', () => {
   assert.equal(localDate(clock), '2026-11-02');
 });
 
-test('placement commission is calculated from principal and percent, with no hours or sitter payout', () => {
+test('placement income uses the entered amount, with no hours or sitter payout', () => {
   const placement = normalizeShift(shift({ shift_type: 'spajanje', commission_base: '80000', commission_percent: '20',
-    hours: '', paid: 9000, charged: 80000 }));
+    hours: '', paid: 9000, charged: '16000' }));
   assert.equal(placement.charged, 16000);
   assert.equal(placement.paid, 0);
   assert.equal(placement.hours, 0);
-  assert.equal(placement.commission_base, 80000);
-  assert.equal(placement.commission_percent, 20);
+  assert.equal(placement.commission_base, null);
+  assert.equal(placement.commission_percent, null);
   const summary = financialTotals([shift(), placement], [expense({ amount: 1000 })]);
   assert.equal(summary.revenue, 26000);
   assert.equal(summary.paid, 6000);
@@ -97,14 +97,17 @@ test('placement commission is calculated from principal and percent, with no hou
   assert.equal(work.commission_percent, null);
 });
 
-test('commission validates amounts and percentages and rounds half up to cents', () => {
-  const placement = changes => shift({ shift_type: 'spajanje', commission_base: 12345.67, commission_percent: 12.5, ...changes });
-  assert.equal(normalizeShift(placement({})).charged, 1543.21);
-  assert.equal(normalizeShift(placement({ commission_base: 1, commission_percent: 0.5 })).charged, 0.01);
-  assert.equal(normalizeShift(placement({ commission_base: '9999999999.99', commission_percent: 100 })).charged, 9999999999.99);
-  for (const change of [{ commission_base: '' }, { commission_base: 0 }, { commission_base: -1 },
-    { commission_percent: '' }, { commission_percent: 0 }, { commission_percent: 100.01 },
-    { commission_percent: 1.001 }, { commission_base: 0.01, commission_percent: 0.01 }]) {
-    assert.throws(() => normalizeShift(placement(change)));
+test('manual placement income validates amounts and old backups preserve collected revenue', () => {
+  const placement = changes => shift({ shift_type: 'spajanje', charged: '12345.67', ...changes });
+  assert.equal(normalizeShift(placement({})).charged, 12345.67);
+  assert.equal(normalizeShift(placement({ charged: '0.01' })).charged, 0.01);
+  assert.equal(normalizeShift(placement({ charged: '9999999999.99' })).charged, 9999999999.99);
+  for (const charged of ['', 0, -1, '1.001', null, Infinity, '10000000000']) {
+    assert.throws(() => normalizeShift(placement({ charged })));
   }
+  const legacy = placement({ hours: 0, paid: 0, charged: 16000, commission_base: 80000, commission_percent: 20 });
+  const restored = parseBackup({ version: 2, shifts: [legacy], expenses: [] }).shifts[0];
+  assert.equal(restored.charged, 16000);
+  assert.equal(restored.commission_base, null);
+  assert.equal(restored.commission_percent, null);
 });

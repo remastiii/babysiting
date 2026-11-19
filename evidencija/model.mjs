@@ -5,19 +5,10 @@ export const EXPENSE_TYPES = Object.freeze({
 export const PAYMENT_METHODS = Object.freeze({ kartica: 'Kartica', racun: 'Račun', gotovina: 'Gotovina' });
 export const SHIFT_TYPES = Object.freeze({
   povremeno: 'Povremeno čuvanje', nocno: 'Noćno čuvanje', hotelsko: 'Hotelsko čuvanje',
-  hitno: 'Hitno čuvanje', proslave: 'Čuvanje na proslavama', spajanje: 'Spajanje porodice i dadilje'
+  hitno: 'Hitno čuvanje', proslave: 'Čuvanje na proslavama', spajanje: 'Dodatna zarada od spajanja'
 });
 
 export const isCommission = record => record.shift_type === 'spajanje';
-
-export function commissionAmount(base, percent) {
-  const principal = amount(base, true);
-  const rate = amount(percent, true);
-  if (rate > 100) throw new Error('Procenat provizije mora biti veći od 0 i najviše 100.');
-  const result = Number((BigInt(cents(principal)) * BigInt(cents(rate)) + 5000n) / 10000n) / 100;
-  if (!result) throw new Error('Provizija mora biti najmanje 0,01 RSD.');
-  return result;
-}
 
 export function localDate(now = new Date()) {
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
@@ -75,10 +66,10 @@ export function normalizeShift(value) {
   return {
     date: value.date, family: text(value.family, 100, true), sitter: text(value.sitter, 100, true),
     shift_type: shiftType, hours,
-    charged: commission ? commissionAmount(value.commission_base, value.commission_percent) : amount(value.charged),
+    charged: amount(value.charged, commission),
     paid: commission ? 0 : amount(value.paid),
-    commission_base: commission ? amount(value.commission_base, true) : null,
-    commission_percent: commission ? amount(value.commission_percent, true) : null,
+    commission_base: null,
+    commission_percent: null,
     description: text(value.description, 500) || null
   };
 }

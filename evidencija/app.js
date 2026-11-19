@@ -1,4 +1,4 @@
-import { EXPENSE_TYPES, PAYMENT_METHODS, SHIFT_TYPES, isCommission, commissionAmount, localDate, normalizeExpense, normalizeShift,
+import { EXPENSE_TYPES, PAYMENT_METHODS, SHIFT_TYPES, isCommission, localDate, normalizeExpense, normalizeShift,
   cents, expenseTotal, financialTotals, inMonth, filterExpenses, monthlyFinance, parseBackup, csvCell, expensesCsv } from './model.mjs';
 // Publishable ključ iz config.js je javan po dizajnu; podatke štiti RLS politika u bazi.
 // Sesija u sessionStorage: zatvaranje taba = odjava.
@@ -46,31 +46,27 @@ function totals(list){return financialTotals(list,[])}
 function filteredStats(){const m=$('statsMonth')?.value;return shifts.filter(s=>!m||s.date.startsWith(m))}
 function updatePreview(){
   const commission=$('shiftType').value==='spajanje';
-  if(commission){
-    try{$('charged').value=commissionAmount($('commissionBase').value,$('commissionPercent').value)}
-    catch{$('charged').value=''}
-  }
   const p=(Number($('charged').value)||0)-(commission?0:Number($('paid').value)||0);
   $('profitPreview').textContent=money(p);$('profitPreview').style.color=p<0?'var(--danger)':'var(--mint)';
 }
 function updateEntryType(){
   const commission=$('shiftType').value==='spajanje';
   ['hours','paid'].forEach(id=>{$(id+'Field').hidden=commission;$(id).disabled=commission;$(id).required=!commission});
-  ['commissionBase','commissionPercent'].forEach(id=>{$(id+'Field').hidden=!commission;$(id).disabled=!commission;$(id).required=commission});
-  $('commissionHelp').hidden=!commission;$('charged').readOnly=commission;
-  $('chargedLabel').textContent=commission?'Naplaćena provizija (RSD) *':'Cena naplaćena (RSD) *';
-  $('profitLabel').textContent=commission?'Profit od spajanja (cela provizija)':'Profit od ove smene (naplaćeno − isplaćeno)';
+  $('commissionHelp').hidden=!commission;
+  $('charged').min=commission?'0.01':'0';
+  $('chargedLabel').textContent=commission?'Dodatna zarada od spajanja (RSD) *':'Cena naplaćena (RSD) *';
+  $('profitLabel').textContent=commission?'Profit od spajanja (ceo uneti iznos)':'Profit od ove smene (naplaćeno − isplaćeno)';
   const editing=Boolean($('editId').value);
-  $('formTitle').textContent=editing?(commission?'Izmeni spajanje':'Izmeni smenu'):(commission?'＋ Dodaj spajanje porodice i dadilje':'＋ Dodaj smenu ili spajanje');
+  $('formTitle').textContent=editing?(commission?'Izmeni zaradu od spajanja':'Izmeni smenu'):(commission?'＋ Dodaj zaradu od spajanja':'＋ Dodaj smenu ili spajanje');
   $('saveBtn').textContent=editing?'Sačuvaj izmene':commission?'Sačuvaj spajanje':'Sačuvaj smenu';
   updatePreview();
 }
-['charged','paid','commissionBase','commissionPercent'].forEach(id=>$(id).addEventListener('input',updatePreview));
+['charged','paid'].forEach(id=>$(id).addEventListener('input',updatePreview));
 $('shiftType').addEventListener('change',()=>{$('charged').value='';updateEntryType()});
 function setOptions(){const fam=[...new Set(shifts.map(s=>s.family).filter(Boolean))].sort();const sit=[...new Set(shifts.map(s=>s.sitter).filter(Boolean))].sort();$('families').innerHTML=fam.map(x=>`<option value="${esc(x)}">`).join('');$('sitters').innerHTML=sit.map(x=>`<option value="${esc(x)}">`).join('');const prev=$('sitterFilter').value;$('sitterFilter').innerHTML='<option value="">Sve dadilje</option>'+sit.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');$('sitterFilter').value=sit.includes(prev)?prev:''}
 function displayResult(id,value,ready){$(id).textContent=ready?money(value):'—';$(id).classList.toggle('negative',ready&&value<0)}
 function renderKpis(){const month=$('homeMonth').value;const t=financialTotals(inMonth(shifts,month),inMonth(expenses,month));displayResult('kRevenue',t.revenue,shiftsReady);displayResult('kPayout',t.paid,shiftsReady);displayResult('kProfit',t.profit,shiftsReady);displayResult('kExpenses',t.expenses,expensesReady);displayResult('kNet',t.net,shiftsReady&&expensesReady);$('kCount').textContent=shiftsReady?t.count:'—';$('kCommissions').textContent=shiftsReady?t.commissionCount+' spajanja':'—';$('kHours').textContent=shiftsReady?num(t.hours)+' sati ukupno':'Podaci nisu dostupni';$('kMargin').textContent=shiftsReady?(t.revenue?num(t.profit/t.revenue*100):'0')+'% marže od naplaćenog':'Podaci nisu dostupni'}
-function row(s,all=false){return `<tr><td>${dateFmt(s.date)}</td><td>${esc(s.family)}</td><td>${esc(s.sitter)}</td><td>${esc(typeLabel(s.shift_type))}${isCommission(s)?`<div class="sub">${num(s.commission_percent)}% od ${money(s.commission_base)}</div>`:''}</td><td class="num">${isCommission(s)?'—':num(s.hours)}</td><td class="num">${money(s.charged)}</td><td class="num">${isCommission(s)?'—':money(s.paid)}</td><td class="num profit" style="${profit(s)<0?'color:var(--danger)':''}">${money(profit(s))}</td>${all?`<td title="${esc(s.description)}">${esc((s.description||'').slice(0,38))}${(s.description||'').length>38?'…':''}</td>`:''}<td><button class="text-btn" data-edit="${esc(s.id)}">Izmeni</button> <button class="text-btn" style="color:var(--danger)" data-delete="${esc(s.id)}">Obriši</button></td></tr>`}
+function row(s,all=false){return `<tr><td>${dateFmt(s.date)}</td><td>${esc(s.family)}</td><td>${esc(s.sitter)}</td><td>${esc(typeLabel(s.shift_type))}</td><td class="num">${isCommission(s)?'—':num(s.hours)}</td><td class="num">${money(s.charged)}</td><td class="num">${isCommission(s)?'—':money(s.paid)}</td><td class="num profit" style="${profit(s)<0?'color:var(--danger)':''}">${money(profit(s))}</td>${all?`<td title="${esc(s.description)}">${esc((s.description||'').slice(0,38))}${(s.description||'').length>38?'…':''}</td>`:''}<td><button class="text-btn" data-edit="${esc(s.id)}">Izmeni</button> <button class="text-btn" style="color:var(--danger)" data-delete="${esc(s.id)}">Obriši</button></td></tr>`}
 function renderRecent(){const list=[...shifts].sort((a,b)=>b.date.localeCompare(a.date)||String(b.created).localeCompare(String(a.created))).slice(0,6);$('recentRows').innerHTML=list.map(s=>row(s)).join('');$('recentEmpty').style.display=list.length?'none':'block'}
 function getFiltered(){const q=$('search').value.trim().toLocaleLowerCase('sr');const m=$('monthFilter').value;const sit=$('sitterFilter').value;const tp=$('typeFilter').value;return [...shifts].filter(s=>(!q||(s.family+' '+s.sitter+' '+(s.description||'')).toLocaleLowerCase('sr').includes(q))&&(!m||s.date.startsWith(m))&&(!sit||s.sitter===sit)&&(!tp||(s.shift_type||'povremeno')===tp)).sort((a,b)=>b.date.localeCompare(a.date)||String(b.created).localeCompare(String(a.created)))}
 function renderAll(){const list=getFiltered();$('allRows').innerHTML=list.map(s=>row(s,true)).join('');$('allEmpty').style.display=list.length?'none':'block';const t=totals(list);$('filteredTotals').textContent=`Prikazano ${list.length} unosa · ${t.count} smena · ${t.commissionCount} spajanja · ${num(t.hours)} sati · Naplaćeno ${money(t.revenue)} · Isplaćeno ${money(t.paid)} · Profit ${money(t.profit)}`}
@@ -98,7 +94,7 @@ function renderAvailability(){
   else{$('recentEmpty').textContent='Još nema unosa. Dodaj smenu ili spajanje iz forme iznad.';$('allEmpty').textContent='Nema unosa koji odgovaraju filterima.'}
 }
 function resetForm(){ $('shiftForm').reset();$('editId').value='';$('date').value=localDate();$('formTitle').textContent='＋ Dodaj novu smenu';$('saveBtn').textContent='Sačuvaj smenu';$('cancelEdit').hidden=true;updateEntryType()}
-function editShift(id){const s=shifts.find(x=>x.id===id);if(!s)return;showPage('home');$('editId').value=s.id;['date','family','sitter','hours','description'].forEach(k=>$(k).value=s[k]??'');$('shiftType').value=s.shift_type||'povremeno';$('charged').value=s.charged;$('paid').value=s.paid;$('formTitle').textContent='Izmeni smenu';$('saveBtn').textContent='Sačuvaj izmene';$('commissionBase').value=s.commission_base??'';$('commissionPercent').value=s.commission_percent??'';$('cancelEdit').hidden=false;updateEntryType();$('formPanel').scrollIntoView({behavior:'smooth',block:'start'})}
+function editShift(id){const s=shifts.find(x=>x.id===id);if(!s)return;showPage('home');$('editId').value=s.id;['date','family','sitter','hours','description'].forEach(k=>$(k).value=s[k]??'');$('shiftType').value=s.shift_type||'povremeno';$('charged').value=s.charged;$('paid').value=s.paid;$('formTitle').textContent='Izmeni smenu';$('saveBtn').textContent='Sačuvaj izmene';$('cancelEdit').hidden=false;updateEntryType();$('formPanel').scrollIntoView({behavior:'smooth',block:'start'})}
 async function runMutation(operation,success,after=()=>{}){
   if(mutating)return false;
   const epoch=loadEpoch;mutating=true;renderAvailability();
@@ -146,7 +142,7 @@ function deleteExpense(id){
 }
 function showPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===name));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===name));const titles={home:[greeting,'Evidencija smena, spajanja, troškova i finansijski pregled BabyGuarda.'],shifts:['Smene i spajanja','Pretraži i upravljaj završenim uslugama.'],expenses:['Troškovi','Unesi plaćene poslovne troškove i pregledaj evidenciju.'],stats:['Statistika','Finansijski rezultat i pregled učinka dadilja i porodica.'],settings:['Podešavanja','Rezervne kopije i informacije o čuvanju podataka.']};$('pageTitle').textContent=titles[name][0];$('pageSubtitle').textContent=titles[name][1];if(name==='stats'){renderStats();renderStatsFinance()}if(name==='shifts')renderAll();if(name==='expenses')renderExpenses();window.scrollTo({top:0,behavior:'smooth'})}
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.goto)));
-$('shiftForm').addEventListener('submit',async e=>{e.preventDefault();if(!shiftsReady||mutating)return;try{const id=$('editId').value;const s=toRow({date:$('date').value,family:$('family').value,sitter:$('sitter').value,shift_type:$('shiftType').value,hours:$('hours').value,charged:$('charged').value,paid:$('paid').value,description:$('description').value,commission_base:$('commissionBase').value,commission_percent:$('commissionPercent').value});await runMutation(()=>saveRecord('shifts',id,s),id?'Izmene su sačuvane.':isCommission(s)?'Spajanje je sačuvano.':'Smena je sačuvana.',resetForm)}catch(error){toast(error.message)}});
+$('shiftForm').addEventListener('submit',async e=>{e.preventDefault();if(!shiftsReady||mutating)return;try{const id=$('editId').value;const s=toRow({date:$('date').value,family:$('family').value,sitter:$('sitter').value,shift_type:$('shiftType').value,hours:$('hours').value,charged:$('charged').value,paid:$('paid').value,description:$('description').value});await runMutation(()=>saveRecord('shifts',id,s),id?'Izmene su sačuvane.':isCommission(s)?'Spajanje je sačuvano.':'Smena je sačuvana.',resetForm)}catch(error){toast(error.message)}});
 $('expenseForm').addEventListener('submit',async e=>{e.preventDefault();if(!expensesReady||mutating)return;try{const id=$('expenseEditId').value;const expense=normalizeExpense({date:$('expenseDate').value,title:$('expenseTitle').value,category:$('expenseCategory').value,amount:$('expenseAmount').value,payment_method:$('expensePayment').value,description:$('expenseDescription').value});await runMutation(()=>saveRecord('expenses',id,expense),id?'Trošak je izmenjen.':'Trošak je sačuvan.',resetExpenseForm)}catch(error){toast(error.message)}});
 $('clearExpenseForm').addEventListener('click',resetExpenseForm);$('cancelExpenseEdit').addEventListener('click',resetExpenseForm);
 $('newExpense').addEventListener('click',()=>{if(mutating)return;resetExpenseForm();$('expenseFormPanel').scrollIntoView({behavior:'smooth',block:'start'});$('expenseTitle').focus()});
@@ -160,7 +156,7 @@ document.addEventListener('click',e=>{if(mutating)return;const edit=e.target.clo
 ['search','monthFilter','sitterFilter','typeFilter'].forEach(id=>$(id).addEventListener(id==='search'?'input':'change',renderAll));$('clearFilters').addEventListener('click',()=>{$('search').value='';$('monthFilter').value='';$('sitterFilter').value='';$('typeFilter').value='';renderAll()});$('statsMonth').addEventListener('change',renderStats);$('clearStats').addEventListener('click',()=>{$('statsMonth').value='';renderStats()});
 function download(name,content,type){const a=document.createElement('a');const url=URL.createObjectURL(new Blob([content],{type}));a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 function exportJson(){if(!shiftsReady||!expensesReady)return;download('babyguard-rezervna-kopija.json',JSON.stringify({app:'BabyGuard Interna Evidencija',version:2,exportedAt:new Date().toISOString(),shifts,expenses},null,2),'application/json')}
-function exportCsv(){if(!shiftsReady)return;const list=getFiltered();const heads=['Datum','Porodica','Dadilja','Vrsta','Sati','Naplaćeno RSD','Isplaćeno RSD','Profit RSD','Napomena','Osnovica za proviziju RSD','Provizija %'];const rows=list.map(s=>[s.date,s.family,s.sitter,typeLabel(s.shift_type),s.hours,s.charged,s.paid,profit(s),s.description,s.commission_base,s.commission_percent].map(csvCell).join(';'));download('babyguard-smene.csv','\ufeff'+[heads.map(csvCell).join(';'),...rows].join('\r\n'),'text/csv;charset=utf-8')}
+function exportCsv(){if(!shiftsReady)return;const list=getFiltered();const heads=['Datum','Porodica','Dadilja','Vrsta','Sati','Naplaćeno RSD','Isplaćeno RSD','Profit RSD','Napomena'];const rows=list.map(s=>[s.date,s.family,s.sitter,typeLabel(s.shift_type),s.hours,s.charged,s.paid,profit(s),s.description].map(csvCell).join(';'));download('babyguard-smene.csv','\ufeff'+[heads.map(csvCell).join(';'),...rows].join('\r\n'),'text/csv;charset=utf-8')}
 $('exportCsv').addEventListener('click',exportCsv);$('settingsExport').addEventListener('click',exportJson);
 $('importFile').addEventListener('change',async e=>{
   const file=e.target.files[0];if(!file||mutating||!shiftsReady||!expensesReady)return;

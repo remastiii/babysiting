@@ -2,13 +2,13 @@
 
 Static website with a private shifts, placement commissions and business expense ledger at `/evidencija/`.
 
-Choose **Spajanje porodice i dadilje** in **Vrsta unosa** to record a collected
-placement commission for long-term care. Enter the family, sitter, collection date,
-commission principal in RSD and percentage (greater than 0, at most 100).
-Only the calculated commission is revenue and profit; the principal is not revenue.
-Placements have zero sitter payout and zero hours, and do not count as worked shifts
-or affect average shift profit. They appear in the ledger, type filters, monthly
-finances, CSV exports and JSON backups. The percentage and principal remain editable.
+Choose **Dodatna zarada od spajanja** in **Vrsta unosa** to record collected
+placement income. Enter the family, sitter, collection date and the amount in RSD.
+There is no percentage calculation: the entered amount is revenue and profit before
+business expenses. Placements have zero sitter payout and zero hours, and do not
+count as worked shifts or affect average shift profit. They appear in the ledger,
+type filters, monthly finances, CSV exports and JSON backups. Historical percentage
+placements and their backups retain the collected amount when opened or restored.
 
 ## Local preview
 
@@ -53,6 +53,12 @@ The app tests use an in-memory DOM and Supabase adapter; they do not write to th
 shared database and do not replace a visual browser test.
 
 ## Database changes
+
+`supabase/migrations/20261119230448_allow_manual_placement_income.sql` allows
+manual placement amounts without a principal or percentage. It has been applied
+to the connected project and preserves historical rows and compatibility with the
+previously published form. The placement SQL tests also cover manual amounts,
+edits, backup restore and rejected hours/payouts; every test write is rolled back.
 
 `supabase/migrations/20261119093332_add_placement_commissions.sql` adds commission
 fields and the `spajanje` record type, enforces zero hours/payout and the calculated
