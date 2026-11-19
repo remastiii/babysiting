@@ -1,6 +1,14 @@
 # BabyGuard
 
-Static website with a private shifts and business expense ledger at `/evidencija/`.
+Static website with a private shifts, placement commissions and business expense ledger at `/evidencija/`.
+
+Choose **Spajanje porodice i dadilje** in **Vrsta unosa** to record a collected
+placement commission for long-term care. Enter the family, sitter, collection date,
+commission principal in RSD and percentage (greater than 0, at most 100).
+Only the calculated commission is revenue and profit; the principal is not revenue.
+Placements have zero sitter payout and zero hours, and do not count as worked shifts
+or affect average shift profit. They appear in the ledger, type filters, monthly
+finances, CSV exports and JSON backups. The percentage and principal remain editable.
 
 ## Local preview
 
@@ -45,6 +53,14 @@ The app tests use an in-memory DOM and Supabase adapter; they do not write to th
 shared database and do not replace a visual browser test.
 
 ## Database changes
+
+`supabase/migrations/20261119093332_add_placement_commissions.sql` adds commission
+fields and the `spajanje` record type, enforces zero hours/payout and the calculated
+commission, and updates backup restore. It has been applied to the connected project.
+Existing shift rows, grants and access policies are preserved. Run the whole
+`supabase/tests/placement_commissions.sql` file as postgres to verify insertion,
+editing, rejected payouts and hours, commission backup restore and legacy backups.
+Every test write is rolled back. The app and model tests also cover commissions.
 
 `supabase/migrations/20261102160250_add_expense_ledger.sql` adds `expenses`, a
 private membership list for the two existing team accounts, and the transactional

@@ -20,7 +20,7 @@ test('validates expenses and rejects invalid dates, amounts, categories and paym
 
 test('money totals use cents, avoid duplicate sitter payouts and allow a negative result', () => {
   assert.deepEqual(financialTotals([shift()], [expense({ amount: 1000 })]),
-    { revenue: 10000, paid: 6000, profit: 4000, expenses: 1000, net: 3000, hours: 2, count: 1 });
+    { revenue: 10000, paid: 6000, profit: 4000, expenses: 1000, net: 3000, hours: 2, count: 1, commissionCount: 0 });
   assert.equal(expenseTotal([expense({ amount: 0.1 }), expense({ amount: 0.2 })]), 0.3);
   assert.equal(financialTotals([], [expense({ amount: 300 })]).net, -300);
 });
@@ -73,4 +73,38 @@ test('CSV supports Serbian text, multiline notes, quotes and prevents spreadshee
 test('default date uses the device calendar, including near midnight', () => {
   const clock = { getFullYear: () => 2026, getMonth: () => 10, getDate: () => 2 };
   assert.equal(localDate(clock), '2026-11-02');
+});
+
+test('placement commission is calculated from principal and percent, with no hours or sitter payout', () => {
+  const placement = normalizeShift(shift({ shift_type: 'spajanje', commission_base: '80000', commission_percent: '20',
+    hours: '', paid: 9000, charged: 80000 }));
+  assert.equal(placement.charged, 16000);
+  assert.equal(placement.paid, 0);
+  assert.equal(placement.hours, 0);
+  assert.equal(placement.commission_base, 80000);
+  assert.equal(placement.commission_percent, 20);
+  const summary = financialTotals([shift(), placement], [expense({ amount: 1000 })]);
+  assert.equal(summary.revenue, 26000);
+  assert.equal(summary.paid, 6000);
+  assert.equal(summary.net, 19000);
+  assert.equal(summary.count, 1);
+  assert.equal(summary.commissionCount, 1);
+  assert.equal(summary.hours, 2);
+  assert.equal(monthlyFinance([placement], [])[0].profit, 16000);
+  assert.deepEqual(parseBackup({ version: 2, shifts: [placement], expenses: [] }).shifts, [placement]);
+  const work = normalizeShift({ ...placement, shift_type: 'povremeno', hours: 1 });
+  assert.equal(work.commission_base, null);
+  assert.equal(work.commission_percent, null);
+});
+
+test('commission validates amounts and percentages and rounds half up to cents', () => {
+  const placement = changes => shift({ shift_type: 'spajanje', commission_base: 12345.67, commission_percent: 12.5, ...changes });
+  assert.equal(normalizeShift(placement({})).charged, 1543.21);
+  assert.equal(normalizeShift(placement({ commission_base: 1, commission_percent: 0.5 })).charged, 0.01);
+  assert.equal(normalizeShift(placement({ commission_base: '9999999999.99', commission_percent: 100 })).charged, 9999999999.99);
+  for (const change of [{ commission_base: '' }, { commission_base: 0 }, { commission_base: -1 },
+    { commission_percent: '' }, { commission_percent: 0 }, { commission_percent: 100.01 },
+    { commission_percent: 1.001 }, { commission_base: 0.01, commission_percent: 0.01 }]) {
+    assert.throws(() => normalizeShift(placement(change)));
+  }
 });

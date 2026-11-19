@@ -5,8 +5,19 @@ export const EXPENSE_TYPES = Object.freeze({
 export const PAYMENT_METHODS = Object.freeze({ kartica: 'Kartica', racun: 'Račun', gotovina: 'Gotovina' });
 export const SHIFT_TYPES = Object.freeze({
   povremeno: 'Povremeno čuvanje', nocno: 'Noćno čuvanje', hotelsko: 'Hotelsko čuvanje',
-  hitno: 'Hitno čuvanje', proslave: 'Čuvanje na proslavama'
+  hitno: 'Hitno čuvanje', proslave: 'Čuvanje na proslavama', spajanje: 'Spajanje porodice i dadilje'
 });
+
+export const isCommission = record => record.shift_type === 'spajanje';
+
+export function commissionAmount(base, percent) {
+  const principal = amount(base, true);
+  const rate = amount(percent, true);
+  if (rate > 100) throw new Error('Procenat provizije mora biti veći od 0 i najviše 100.');
+  const result = Number((BigInt(cents(principal)) * BigInt(cents(rate)) + 5000n) / 10000n) / 100;
+  if (!result) throw new Error('Provizija mora biti najmanje 0,01 RSD.');
+  return result;
+}
 
 export function localDate(now = new Date()) {
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
@@ -54,15 +65,20 @@ export function normalizeExpense(value) {
 
 export function normalizeShift(value) {
   if (!value || !validDate(value.date)) throw new Error('Proveri datum smene.');
-  const hours = Number(value.hours);
-  if (!Number.isFinite(hours) || hours < 0.25 || hours > 100 || !Number.isInteger(hours * 4)) {
+  const commission = isCommission(value);
+  const hours = commission ? 0 : Number(value.hours);
+  if (!commission && (!Number.isFinite(hours) || hours < 0.25 || hours > 100 || !Number.isInteger(hours * 4))) {
     throw new Error('Broj sati mora biti od 0,25 do 100, u koracima od 0,25.');
   }
   const shiftType = value.shift_type ?? 'povremeno';
   if (!Object.hasOwn(SHIFT_TYPES, shiftType)) throw new Error('Proveri vrstu smene.');
   return {
     date: value.date, family: text(value.family, 100, true), sitter: text(value.sitter, 100, true),
-    shift_type: shiftType, hours, charged: amount(value.charged), paid: amount(value.paid),
+    shift_type: shiftType, hours,
+    charged: commission ? commissionAmount(value.commission_base, value.commission_percent) : amount(value.charged),
+    paid: commission ? 0 : amount(value.paid),
+    commission_base: commission ? amount(value.commission_base, true) : null,
+    commission_percent: commission ? amount(value.commission_percent, true) : null,
     description: text(value.description, 500) || null
   };
 }
@@ -72,12 +88,14 @@ export function expenseTotal(list) {
 }
 
 export function financialTotals(shifts, expenses) {
+  const work = shifts.filter(shift => !isCommission(shift));
   const revenue = shifts.reduce((sum, shift) => sum + cents(shift.charged), 0);
   const paid = shifts.reduce((sum, shift) => sum + cents(shift.paid), 0);
   const costs = expenses.reduce((sum, expense) => sum + cents(expense.amount), 0);
   return { revenue: revenue / 100, paid: paid / 100, profit: (revenue - paid) / 100,
     expenses: costs / 100, net: (revenue - paid - costs) / 100,
-    hours: shifts.reduce((sum, shift) => sum + Number(shift.hours), 0), count: shifts.length };
+    hours: work.reduce((sum, shift) => sum + Number(shift.hours), 0), count: work.length,
+    commissionCount: shifts.length - work.length };
 }
 
 export function inMonth(list, month) {

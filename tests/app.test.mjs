@@ -31,7 +31,7 @@ async function app({ shifts = [sampleShift], expenses = [sampleExpense], expense
       reset() {
         const names = id === 'expenseForm'
           ? ['expenseEditId', 'expenseDate', 'expenseTitle', 'expenseCategory', 'expenseAmount', 'expensePayment', 'expenseDescription']
-          : ['editId', 'date', 'family', 'sitter', 'hours', 'charged', 'paid', 'description'];
+          : ['editId', 'date', 'family', 'sitter', 'hours', 'charged', 'paid', 'description', 'commissionBase', 'commissionPercent'];
         for (const name of names) elements.get(name).value = '';
         if (id === 'shiftForm') elements.get('shiftType').value = 'povremeno';
       }
@@ -174,4 +174,75 @@ test('greeting prefers the profile name and handles emails starting with digits'
     const a = await app({ user });
     assert.equal(a.element('pageTitle').textContent, expected);
   }
+});
+
+test('placement form calculates commission, persists edits, filters and keeps shift statistics separate', async () => {
+  const a = await app();
+  a.element('shiftType').value = 'spajanje'; await a.fire('shiftType', 'change');
+  assert.equal(a.element('hoursField').hidden, true);
+  assert.equal(a.element('paid').disabled, true);
+  assert.equal(a.element('paid').required, false);
+  assert.equal(a.element('commissionBase').required, true);
+  assert.equal(a.element('charged').readOnly, true);
+  for (const [id, value] of Object.entries({ date: '2026-11-19', family: 'Placement family', sitter: 'Placement sitter',
+    commissionBase: '80000', commissionPercent: '20', paid: '5000', hours: '8' })) a.element(id).value = value;
+  await a.fire('commissionPercent', 'input');
+  assert.equal(a.element('charged').value, 16000);
+  assert.match(a.element('profitPreview').textContent, /16[.\s]?000 RSD/);
+  await a.fire('shiftForm', 'submit');
+  assert.equal(a.db.shifts.length, 2);
+  assert.equal(a.db.shifts[1].charged, 16000);
+  assert.equal(a.db.shifts[1].paid, 0);
+  assert.equal(a.db.shifts[1].hours, 0);
+  assert.equal(a.element('kCount').textContent, 1);
+  assert.equal(a.element('kCommissions').textContent, '1 spajanja');
+  assert.equal(a.element('sCount').textContent, '1 / 2');
+  assert.match(a.element('kNet').textContent, /19[.\s]?000 RSD/);
+  assert.ok(!a.element('sitterStats').innerHTML.includes('Placement sitter'));
+  assert.match(a.element('insights').innerHTML, /Prosečan profit po smeni: <b>4[.\s]?000 RSD/);
+  assert.equal(a.element('hoursField').hidden, false);
+  assert.equal(a.element('commissionBase').disabled, true);
+  a.run("editShift('new1')");
+  assert.equal(a.element('commissionBase').value, 80000);
+  assert.equal(a.element('commissionPercent').value, 20);
+  a.element('commissionPercent').value = '25'; await a.fire('commissionPercent', 'input');
+  await a.fire('shiftForm', 'submit');
+  assert.equal(a.db.shifts[1].charged, 20000);
+  a.element('typeFilter').value = 'spajanje'; await a.fire('typeFilter', 'change');
+  assert.match(a.element('filteredTotals').textContent, /1 unosa · 0 smena · 1 spajanja/);
+  assert.match(a.element('allRows').innerHTML, /25% od 80[.\s]?000 RSD/);
+  assert.ok(!a.element('allRows').innerHTML.includes('data-edit="s1"'));
+  const csv = a.run("download=(name,content)=>{globalThis.exported=content};exportCsv();exported");
+  assert.match(csv, /"Osnovica za proviziju RSD";"Provizija %"/);
+  assert.match(csv, /"Spajanje porodice i dadilje";"0";"20000";"0";"20000";"";"80000";"25"/);
+  const backup = JSON.parse(a.run('exportJson();exported'));
+  const backedUpPlacement = backup.shifts.find(record => record.shift_type === 'spajanje');
+  assert.equal(backedUpPlacement.commission_percent, 25);
+  assert.equal(backedUpPlacement.commission_base, 80000);
+  a.run("editShift('new1')");
+  a.element('shiftType').value = 'povremeno'; await a.fire('shiftType', 'change');
+  a.element('hours').value = '3'; a.element('paid').value = '600'; a.element('charged').value = '1000';
+  await a.fire('shiftForm', 'submit');
+  assert.equal(a.db.shifts[1].commission_base, null);
+  assert.equal(a.db.shifts[1].commission_percent, null);
+  assert.equal(a.element('kCount').textContent, 2);
+  assert.equal(a.element('kCommissions').textContent, '0 spajanja');
+});
+
+test('invalid commission cannot be saved and commission-only months have no shifts or sitter payouts', async () => {
+  const placement = { ...sampleShift, shift_type: 'spajanje', hours: 0, paid: 0, charged: 16000,
+    commission_base: 80000, commission_percent: 20 };
+  const a = await app({ shifts: [placement], expenses: [] });
+  assert.equal(a.element('kCount').textContent, 0);
+  assert.equal(a.element('sCount').textContent, '0 / 0');
+  assert.equal(a.element('kPayout').textContent, '0 RSD');
+  assert.equal(a.element('sitterStats').innerHTML, '');
+  assert.match(a.element('familyStats').innerHTML, /<td class="num">0<\/td>/);
+  a.run("editShift('s1')"); a.element('commissionPercent').value = '101';
+  await a.fire('shiftForm', 'submit');
+  assert.equal(a.db.shifts[0].commission_percent, 20);
+  assert.equal(a.calls.filter(c => c.action === 'update').length, 0);
+  await a.fire('cancelEdit');
+  assert.equal(a.element('commissionBase').value, '');
+  assert.equal(a.element('paid').required, true);
 });

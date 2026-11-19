@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>BabyGuard — Evidencija smena i troškova</title>
+<title>BabyGuard — Evidencija smena, spajanja i troškova</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js" integrity="sha384-BWcjm9OdFth9TbhCxZPdm+gAOUMAzQy9nmTs12ioXdCcbVnJaPMn+fMUoQCLt60R" crossorigin="anonymous"></script>
 <script src="config.js"></script>
 <style>
@@ -31,7 +31,7 @@
   <div class="brand"><div class="logo">♥</div><div><strong>BabyGuard</strong><small>Interna evidencija</small></div></div>
   <nav class="nav">
     <button class="active" data-page="home"><span class="ico">⌂</span> Početna</button>
-    <button data-page="shifts"><span class="ico">＋</span> Sve smene</button>
+    <button data-page="shifts"><span class="ico">＋</span> Smene i spajanja</button>
     <button data-page="expenses"><span class="ico">▤</span> Troškovi</button>
     <button data-page="stats"><span class="ico">▥</span> Statistika</button>
     <button data-page="settings"><span class="ico">⚙</span> Podešavanja</button>
@@ -46,44 +46,47 @@
     <div class="cards finance-cards">
       <div class="card kpi"><div class="kpi-head"><span class="kpi-icon mint">▤</span>Ukupno naplaćeno</div><strong id="kRevenue">0 RSD</strong><small>Za izabrani period</small></div>
       <div class="card kpi"><div class="kpi-head"><span class="kpi-icon blue">▣</span>Isplaćeno dadiljama</div><strong id="kPayout">0 RSD</strong><small>Za izabrani period</small></div>
-      <div class="card kpi"><div class="kpi-head"><span class="kpi-icon purple">↗</span>Profit od smena</div><strong id="kProfit">0 RSD</strong><small id="kMargin">0% marže</small></div>
-      <div class="card kpi"><div class="kpi-head"><span class="kpi-icon blue">▦</span>Odrađene smene</div><strong id="kCount">0</strong><small id="kHours">0 sati ukupno</small></div>
+      <div class="card kpi"><div class="kpi-head"><span class="kpi-icon purple">↗</span>Profit od usluga</div><strong id="kProfit">0 RSD</strong><small id="kMargin">0% marže</small></div>
+      <div class="card kpi"><div class="kpi-head"><span class="kpi-icon blue">▦</span>Odrađene smene</div><strong id="kCount">0</strong><small id="kHours">0 sati ukupno</small><small id="kCommissions" style="display:block">0 spajanja</small></div>
       <div class="card kpi"><div class="kpi-head"><span class="kpi-icon cost">−</span>Poslovni troškovi</div><strong id="kExpenses">—</strong><small>Za izabrani period</small></div>
-      <div class="card kpi"><div class="kpi-head"><span class="kpi-icon result">=</span>Rezultat posle troškova</div><strong id="kNet">—</strong><small>Profit od smena − poslovni troškovi</small></div>
+      <div class="card kpi"><div class="kpi-head"><span class="kpi-icon result">=</span>Rezultat posle troškova</div><strong id="kNet">—</strong><small>Profit od usluga − poslovni troškovi</small></div>
     </div>
     <div class="grid">
       <div class="stack">
         <div class="panel" id="formPanel">
-          <div class="panel-head"><div><h2 id="formTitle">＋ Dodaj novu smenu</h2><div class="sub">Unesi završenu uslugu. Profit se računa automatski.</div></div></div>
+          <div class="panel-head"><div><h2 id="formTitle">＋ Dodaj smenu ili spajanje</h2><div class="sub">Unesi smenu ili naplaćenu proviziju za dugoročno čuvanje.</div></div></div>
           <form id="shiftForm">
             <input type="hidden" id="editId">
             <div class="form-grid">
-              <div class="field"><label for="date">Datum smene *</label><input id="date" type="date" required></div>
+              <div class="field"><label for="date">Datum naplate / smene *</label><input id="date" type="date" required></div>
               <div class="field"><label for="family">Porodica / oznaka *</label><input id="family" list="families" placeholder="npr. Porodica Petrović" required maxlength="100"><datalist id="families"></datalist></div>
               <div class="field"><label for="sitter">Dadilja *</label><input id="sitter" list="sitters" placeholder="Ime dadilje" required maxlength="100"><datalist id="sitters"></datalist></div>
-              <div class="field"><label for="shiftType">Vrsta smene *</label><select id="shiftType" required><option value="povremeno">Povremeno čuvanje</option><option value="nocno">Noćno čuvanje</option><option value="hotelsko">Hotelsko čuvanje</option><option value="hitno">Hitno čuvanje</option><option value="proslave">Čuvanje na proslavama</option></select></div>
-              <div class="field"><label for="hours">Broj sati *</label><input id="hours" type="number" min="0.25" max="100" step="0.25" placeholder="3" required></div>
-              <div class="field"><label for="charged">Cena naplaćena (RSD) *</label><input id="charged" type="number" min="0" step="0.01" placeholder="3500" required></div>
-              <div class="field"><label for="paid">Isplata dadilji (RSD) *</label><input id="paid" type="number" min="0" step="0.01" placeholder="2100" required></div>
+              <div class="field"><label for="shiftType">Vrsta unosa *</label><select id="shiftType" required><option value="povremeno">Povremeno čuvanje</option><option value="nocno">Noćno čuvanje</option><option value="hotelsko">Hotelsko čuvanje</option><option value="hitno">Hitno čuvanje</option><option value="proslave">Čuvanje na proslavama</option><option value="spajanje">Spajanje porodice i dadilje</option></select></div>
+              <div class="field" id="hoursField"><label for="hours">Broj sati *</label><input id="hours" type="number" min="0.25" max="100" step="0.25" placeholder="3" required></div>
+              <div class="field" id="commissionBaseField" hidden><label for="commissionBase">Osnovica za proviziju (RSD) *</label><input id="commissionBase" type="number" min="0.01" max="9999999999.99" step="0.01" placeholder="npr. 80000" disabled></div>
+              <div class="field" id="commissionPercentField" hidden><label for="commissionPercent">Provizija (%) *</label><input id="commissionPercent" type="number" min="0.01" max="100" step="0.01" placeholder="npr. 20" disabled></div>
+              <div class="field"><label for="charged" id="chargedLabel">Cena naplaćena (RSD) *</label><input id="charged" type="number" min="0" step="0.01" placeholder="3500" required></div>
+              <div class="field" id="paidField"><label for="paid">Isplata dadilji (RSD) *</label><input id="paid" type="number" min="0" step="0.01" placeholder="2100" required></div>
+              <div class="sub span3" id="commissionHelp" hidden>Dugoročno čuvanje: naplaćuje se samo usluga spajanja. Provizija = osnovica × procenat / 100. Ceo iznos je profit; nema sati ni isplate dadilji.</div>
               <div class="field span3"><label for="description">Opis / napomena (opciono)</label><textarea id="description" maxlength="500" placeholder="Dodatne informacije o smeni…"></textarea></div>
-              <div class="span3 profit-preview"><span>Profit od ove smene (naplaćeno − isplaćeno)</span><strong id="profitPreview">0 RSD</strong></div>
+              <div class="span3 profit-preview"><span id="profitLabel">Profit od ove smene (naplaćeno − isplaćeno)</span><strong id="profitPreview" aria-live="polite">0 RSD</strong></div>
             </div>
             <div class="actions"><button type="button" class="btn" id="cancelEdit" hidden>Otkaži izmenu</button><button type="reset" class="btn" id="clearForm">Očisti</button><button type="submit" class="btn primary" id="saveBtn">Sačuvaj smenu</button></div>
           </form>
-          <div class="note">Unos je namenjen samo završenim smenama. Ako porodica još nije platila ili dadilja nije isplaćena, dodaj to u napomenu i proveri iznose pre obračuna.</div>
+          <div class="note">Evidentiraj završene smene ili naplaćene provizije od spajanja. Kod spajanja osnovica služi samo za obračun procenta i ne ulazi u prihod; prihod je samo naplaćena provizija.</div>
         </div>
-        <div class="panel"><div class="panel-head"><div><h2>Poslednje smene</h2><div class="sub">Najnovije evidentirane usluge</div></div><button class="text-btn" data-goto="shifts">Pogledaj sve →</button></div><div class="table-wrap"><table><thead><tr><th>Datum</th><th>Porodica</th><th>Dadilja</th><th>Vrsta</th><th class="num">Sati</th><th class="num">Naplaćeno</th><th class="num">Isplaćeno</th><th class="num">Profit</th><th></th></tr></thead><tbody id="recentRows"></tbody></table><div class="empty" id="recentEmpty">Još nema unetih smena. Dodaj prvu smenu iz forme iznad.</div></div></div>
+        <div class="panel"><div class="panel-head"><div><h2>Poslednji unosi</h2><div class="sub">Najnovije evidentirane usluge</div></div><button class="text-btn" data-goto="shifts">Pogledaj sve →</button></div><div class="table-wrap"><table><thead><tr><th>Datum</th><th>Porodica</th><th>Dadilja</th><th>Vrsta</th><th class="num">Sati</th><th class="num">Naplaćeno</th><th class="num">Isplaćeno</th><th class="num">Profit</th><th></th></tr></thead><tbody id="recentRows"></tbody></table><div class="empty" id="recentEmpty">Još nema unetih smena. Dodaj prvu smenu iz forme iznad.</div></div></div>
       </div>
       <div class="stack">
-        <div class="panel"><div class="panel-head"><div><h2>Poslovanje po mesecima</h2><div class="sub">Poslednjih šest meseci sa smenama ili troškovima · RSD</div></div></div><div class="legend"><span><i class="dot" style="background:var(--mint)"></i>Naplaćeno</span><span><i class="dot" style="background:var(--blue)"></i>Isplaćeno dadiljama</span><span><i class="dot" style="background:#bd7854"></i>Troškovi</span><span><i class="dot" style="background:var(--purple)"></i>Rezultat posle troškova</span></div><div class="chart" id="chart" role="img" aria-label="Mesečni finansijski pregled u RSD"></div><div class="chart-foot" id="chartFoot">Rezultat ispod nulte linije označava gubitak.</div></div>
-        <div class="panel"><div class="panel-head"><div><h2>Brzi uvidi</h2><div class="sub">Na osnovu unetih smena</div></div></div><div class="insights" id="insights"></div></div>
-        <div class="panel"><div class="panel-head"><div><h2>Kako se računa rezultat</h2></div></div><div class="sub">Profit od smena = naplaćeno − isplate dadiljama. Rezultat posle troškova = profit od smena − evidentirani poslovni troškovi. Porezi i drugi izdaci ulaze u rezultat samo ako ih uneseš kao trošak.</div></div>
+        <div class="panel"><div class="panel-head"><div><h2>Poslovanje po mesecima</h2><div class="sub">Poslednjih šest meseci sa uslugama ili troškovima · RSD</div></div></div><div class="legend"><span><i class="dot" style="background:var(--mint)"></i>Naplaćeno</span><span><i class="dot" style="background:var(--blue)"></i>Isplaćeno dadiljama</span><span><i class="dot" style="background:#bd7854"></i>Troškovi</span><span><i class="dot" style="background:var(--purple)"></i>Rezultat posle troškova</span></div><div class="chart" id="chart" role="img" aria-label="Mesečni finansijski pregled u RSD"></div><div class="chart-foot" id="chartFoot">Rezultat ispod nulte linije označava gubitak.</div></div>
+        <div class="panel"><div class="panel-head"><div><h2>Brzi uvidi</h2><div class="sub">Na osnovu smena i spajanja</div></div></div><div class="insights" id="insights"></div></div>
+        <div class="panel"><div class="panel-head"><div><h2>Kako se računa rezultat</h2></div></div><div class="sub">Profit od usluga = naplaćene smene − isplate dadiljama + provizije od spajanja. Spajanja se ne računaju kao smene ili sati. Rezultat posle troškova = profit od usluga − evidentirani poslovni troškovi. Porezi i drugi izdaci ulaze u rezultat samo ako ih uneseš kao trošak.</div></div>
       </div>
     </div>
   </section>
   <section id="shifts" class="page">
-    <div class="panel"><div class="panel-head"><div><h2>Sve smene</h2><div class="sub">Pretraži, filtriraj, izmeni ili obriši evidenciju.</div></div><div class="small-actions"><button class="btn" id="exportCsv">Izvezi CSV</button><button class="btn primary" id="newShift">＋ Nova smena</button></div></div>
-      <div class="filters"><input id="search" placeholder="Pretraži porodicu ili dadilju…"><input id="monthFilter" type="month" aria-label="Filtriraj po mesecu"><select id="sitterFilter"><option value="">Sve dadilje</option></select><select id="typeFilter" aria-label="Filtriraj po vrsti smene"><option value="">Sve vrste</option><option value="povremeno">Povremeno čuvanje</option><option value="nocno">Noćno čuvanje</option><option value="hotelsko">Hotelsko čuvanje</option><option value="hitno">Hitno čuvanje</option><option value="proslave">Čuvanje na proslavama</option></select><button class="btn" id="clearFilters">Resetuj filtere</button></div>
+    <div class="panel"><div class="panel-head"><div><h2>Smene i spajanja</h2><div class="sub">Pretraži, filtriraj, izmeni ili obriši evidenciju.</div></div><div class="small-actions"><button class="btn" id="exportCsv">Izvezi CSV</button><button class="btn primary" id="newShift">＋ Novi unos</button></div></div>
+      <div class="filters"><input id="search" placeholder="Pretraži porodicu ili dadilju…"><input id="monthFilter" type="month" aria-label="Filtriraj po mesecu"><select id="sitterFilter"><option value="">Sve dadilje</option></select><select id="typeFilter" aria-label="Filtriraj po vrsti unosa"><option value="">Sve vrste</option><option value="povremeno">Povremeno čuvanje</option><option value="nocno">Noćno čuvanje</option><option value="hotelsko">Hotelsko čuvanje</option><option value="hitno">Hitno čuvanje</option><option value="proslave">Čuvanje na proslavama</option><option value="spajanje">Spajanje porodice i dadilje</option></select><button class="btn" id="clearFilters">Resetuj filtere</button></div>
       <div class="table-wrap"><table><thead><tr><th>Datum</th><th>Porodica</th><th>Dadilja</th><th>Vrsta</th><th class="num">Sati</th><th class="num">Naplaćeno</th><th class="num">Isplaćeno</th><th class="num">Profit</th><th>Napomena</th><th>Akcije</th></tr></thead><tbody id="allRows"></tbody></table><div class="empty" id="allEmpty">Nema smena koje odgovaraju filterima.</div></div><div class="note" id="filteredTotals"></div>
     </div>
   </section>
@@ -112,12 +115,12 @@
     </div>
   </section>
   <section id="stats" class="page">
-    <div class="panel"><div class="panel-head"><div><h2>Statistika i pregled poslovanja</h2><div class="sub">Izaberi mesec ili ostavi prazno za sve smene.</div></div></div><div class="filters"><input id="statsMonth" type="month" aria-label="Mesec za statistiku"><button class="btn" id="clearStats">Prikaži sve</button></div>
+    <div class="panel"><div class="panel-head"><div><h2>Statistika i pregled poslovanja</h2><div class="sub">Izaberi mesec ili ostavi prazno za sve unose.</div></div></div><div class="filters"><input id="statsMonth" type="month" aria-label="Mesec za statistiku"><button class="btn" id="clearStats">Prikaži sve</button></div>
       <div class="cards finance-cards">
         <div class="card kpi"><div class="kpi-head"><span class="kpi-icon mint">▤</span>Naplaćeno</div><strong id="sRevenue">0 RSD</strong></div>
         <div class="card kpi"><div class="kpi-head"><span class="kpi-icon blue">▣</span>Isplaćeno</div><strong id="sPayout">0 RSD</strong></div>
-        <div class="card kpi"><div class="kpi-head"><span class="kpi-icon purple">↗</span>Profit od smena</div><strong id="sProfit">0 RSD</strong></div>
-        <div class="card kpi"><div class="kpi-head"><span class="kpi-icon gray">▦</span>Broj smena / sati</div><strong id="sCount">0 / 0</strong></div>
+        <div class="card kpi"><div class="kpi-head"><span class="kpi-icon purple">↗</span>Profit od usluga</div><strong id="sProfit">0 RSD</strong></div>
+        <div class="card kpi"><div class="kpi-head"><span class="kpi-icon gray">▦</span>Broj smena / sati</div><strong id="sCount">0 / 0</strong><small id="sCommissions">0 spajanja</small></div>
         <div class="card kpi"><div class="kpi-head"><span class="kpi-icon cost">−</span>Poslovni troškovi</div><strong id="sExpenses">—</strong></div>
         <div class="card kpi"><div class="kpi-head"><span class="kpi-icon result">=</span>Rezultat posle troškova</div><strong id="sNet">—</strong></div>
       </div>
@@ -129,11 +132,11 @@
   </section>
   <section id="settings" class="page">
     <div class="panel"><div class="panel-head"><div><h2>Podešavanja i podaci</h2><div class="sub">Podaci se čuvaju u zajedničkoj bazi (Supabase).</div></div></div>
-      <p><b>Podaci:</b> smene i troškovi čuvaju se u zajedničkoj Supabase bazi. Rezervna kopija obuhvata obe evidencije.</p>
+      <p><b>Podaci:</b> smene, spajanja i troškovi čuvaju se u zajedničkoj Supabase bazi. Rezervna kopija obuhvata obe evidencije.</p>
       <p><b>Preporuka:</b> povremeno izvezi JSON rezervnu kopiju.</p>
       <div class="actions" style="justify-content:flex-start"><button class="btn" id="settingsExport">Izvezi rezervnu kopiju (JSON)</button><label class="btn" for="importFile">Uvezi rezervnu kopiju</label><input id="importFile" type="file" accept=".json,application/json" class="hidden"></div>
       <hr style="border:0;border-top:1px solid var(--line);margin:22px 0">
-      <h2>Obriši sve smene</h2><p class="sub">Ova radnja trajno briše sve smene iz zajedničke baze. Troškovi ostaju sačuvani. Prvo napravi rezervnu kopiju.</p><button class="btn danger" id="deleteAll">Obriši sve smene</button>
+      <h2>Obriši sve smene i spajanja</h2><p class="sub">Ova radnja trajno briše sve smene i spajanja iz zajedničke baze. Troškovi ostaju sačuvani. Prvo napravi rezervnu kopiju.</p><button class="btn danger" id="deleteAll">Obriši sve smene i spajanja</button>
     </div>
   </section>
 </main>
