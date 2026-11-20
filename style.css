@@ -384,14 +384,33 @@ h3 { font-size: 1rem; font-weight: 600; }
 .hero-trust span { font-size: .8rem; color: var(--muted); font-weight: 500; }
 
 .hero-image {
+  position: relative;
   width: 100%;
   aspect-ratio: 4/5;
   max-height: 560px;
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-lg);
+  overflow: hidden;
+}
+.hero-image__photo {
+  position: absolute;
+  inset: 0;
   background-image: url('hero-site.webp');
   background-size: cover;
   background-position: center top;
-  border-radius: var(--r-lg);
-  box-shadow: var(--sh-lg);
+}
+.hero-image__caption {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  max-width: calc(100% - 28px);
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #f2bc9b;
+  color: var(--navy);
+  font-size: .8125rem;
+  font-weight: 500;
+  line-height: 1.5;
 }
 
 /* ================================================================
