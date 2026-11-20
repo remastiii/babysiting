@@ -199,21 +199,11 @@ h3 { font-size: 1rem; font-weight: 600; }
   flex-shrink: 0;
   text-decoration: none;
 }
-.site-logo__mark {
-  width: 34px; height: 34px;
-  border-radius: var(--r-sm);
-  background: var(--accent);
-  color: var(--white);
-  font-size: .75rem;
-  font-weight: 800;
-  letter-spacing: -.5px;
-  display: flex; align-items: center; justify-content: center;
-}
-.site-logo__name {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--navy);
-  letter-spacing: -.3px;
+.site-logo__image {
+  display: block;
+  width: 184px;
+  height: 46px;
+  object-fit: contain;
 }
 
 /* Main nav (desktop) */
@@ -802,6 +792,13 @@ h3 { font-size: 1rem; font-weight: 600; }
 }
 
 .footer-logo { font-size: 1.05rem; font-weight: 700; color: var(--white); display: block; margin-bottom: .45rem; }
+.footer-logo__image {
+  width: 208px;
+  height: auto;
+  padding: 10px 12px;
+  background: var(--white);
+  border-radius: var(--r-sm);
+}
 .footer-brand p { font-size: .83rem; color: rgba(255,255,255,.5); line-height: 1.6; max-width: 240px; margin-top: .35rem; }
 
 .footer-nav    { display: flex; flex-direction: column; gap: .45rem; }
