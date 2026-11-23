@@ -84,4 +84,9 @@
     <priority>0.7</priority>
   </url>
 
+  <url>
+    <loc>https://babyguard.rs/saradnje/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>
