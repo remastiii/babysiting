@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/favicon.svg?v=20261120" type="image/svg+xml">
 <title>BabyGuard — Evidencija smena, spajanja i troškova</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js" integrity="sha384-BWcjm9OdFth9TbhCxZPdm+gAOUMAzQy9nmTs12ioXdCcbVnJaPMn+fMUoQCLt60R" crossorigin="anonymous"></script>
 <script src="config.js"></script>
@@ -14,12 +15,13 @@
 @media(max-width:650px){.layout{display:block}aside{padding:12px;border-right:0;border-bottom:1px solid var(--line);gap:12px}.brand{padding:0 4px}.nav{display:flex;overflow:auto;gap:5px}.nav button{white-space:nowrap;padding:9px 11px}.nav .ico{width:auto}.aside-bottom{margin-top:0;padding-top:8px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11px}.aside-bottom .aside-text,.aside-bottom br{display:none}.logout{margin-top:0;width:auto;padding:6px 10px}.main{padding:16px}.top{align-items:flex-start}.top h1{font-size:23px}.privacy{font-size:10px;padding:7px 9px}.cards{gap:9px}.kpi{padding:13px}.kpi-head{align-items:flex-start;font-size:11px;gap:7px}.kpi-icon{width:30px;height:30px}.kpi strong{font-size:18px}.panel{padding:14px}.form-grid{grid-template-columns:1fr 1fr;gap:11px}.field label{font-size:11px}.field input,.field select{padding:9px 8px}.span3{grid-column:1/-1}.profit-preview{align-items:flex-start;flex-direction:column}.panel h2{font-size:15px}.filters>*{flex:1;min-width:120px}}
 .finance-cards{grid-template-columns:repeat(3,minmax(0,1fr))}.cost{background:#bd7854}.result{background:#326e64}.status{padding:12px 15px;margin-bottom:16px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--danger)}.status button{margin-left:10px}.chart{height:240px;align-items:stretch;padding-top:0;border:0}.month{align-items:stretch;gap:3px}.bar-slot{flex:1;max-width:14px;position:relative;height:100%}.bar-slot .bar{position:absolute;width:100%;min-height:0}.chart-baseline{position:absolute;left:0;right:0;border-top:1px solid var(--line);pointer-events:none}.bar-label{white-space:nowrap}.chart-foot{line-height:1.6}.btn:disabled{opacity:.55;cursor:wait}.panel-head{flex-wrap:wrap}.table-wrap td.note-cell{white-space:normal;min-width:140px;max-width:260px;overflow-wrap:anywhere}.expense-summary{margin:16px 0}.negative{color:var(--danger)!important}[hidden]{display:none!important}.toast{max-width:calc(100vw - 40px)}
 @media(max-width:1050px){.finance-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:650px){.actions{flex-wrap:wrap}.small-actions{flex-wrap:wrap}.bar-label{font-size:9px}.expense-form .form-grid{grid-template-columns:1fr}.expense-form .span3{grid-column:auto}.chart{gap:9px}}
+.logo{object-fit:contain;background:none;border-radius:0}
 </style>
 </head>
 <body>
 <div class="auth" id="authScreen">
   <form class="panel auth-card" id="loginForm">
-    <div class="brand"><div class="logo">♥</div><div><strong>BabyGuard</strong><small>Interna evidencija</small></div></div>
+    <div class="brand"><img class="logo" src="/android-chrome-192x192.png?v=20261120" alt="" width="43" height="43"><div><strong>BabyGuard</strong><small>Interna evidencija</small></div></div>
     <div class="field"><label for="loginEmail">Email</label><input id="loginEmail" type="email" autocomplete="username" required></div>
     <div class="field"><label for="loginPassword">Lozinka</label><input id="loginPassword" type="password" autocomplete="current-password" required></div>
     <div class="auth-error" id="loginError"></div>
@@ -28,7 +30,7 @@
 </div>
 <div class="layout hidden" id="app">
 <aside>
-  <div class="brand"><div class="logo">♥</div><div><strong>BabyGuard</strong><small>Interna evidencija</small></div></div>
+  <div class="brand"><img class="logo" src="/android-chrome-192x192.png?v=20261120" alt="" width="43" height="43"><div><strong>BabyGuard</strong><small>Interna evidencija</small></div></div>
   <nav class="nav">
     <button class="active" data-page="home"><span class="ico">⌂</span> Početna</button>
     <button data-page="shifts"><span class="ico">＋</span> Smene i spajanja</button>
