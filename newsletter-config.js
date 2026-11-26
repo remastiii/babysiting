@@ -3,7 +3,7 @@
  * Changing a campaign: edit offer below AND its matching Brevo form/emails.
  */
 window.BABYGUARD_NEWSLETTER = {
-  enabled: false,
+  enabled: true,
   campaignId: 'prvi-vodic',
   delayMs: 10000,
   dismissDays: 7,
