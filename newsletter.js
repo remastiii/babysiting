@@ -14,6 +14,7 @@
   if (!preview && (!formUrl || (!c.enabled && !liveTest))) return;
   var key = 'babyguard.newsletter.dismissed.v1';
   var previousFocus;
+  var submitted = false;
   var offer = c.offer;
   var dialog = document.createElement('dialog');
   dialog.className = 'newsletter-dialog';
@@ -77,6 +78,27 @@
   section.append(heading, description, trigger);
   var footer = document.querySelector('.site-footer');
   if (footer) footer.before(section); else document.body.appendChild(section);
+  var feedback = document.createElement('div');
+  feedback.className = 'newsletter-feedback';
+  feedback.hidden = true;
+  feedback.setAttribute('role', 'status');
+  feedback.innerHTML = '<p>Prijava je poslata. Proverite email i potvrdite svoju adresu.</p>' +
+    '<button type="button" aria-label="Zatvorite obaveštenje">×</button>';
+  feedback.querySelector('button').addEventListener('click', function () { feedback.hidden = true; });
+  document.body.appendChild(feedback);
+  window.addEventListener('message', function (event) {
+    var frame = content.querySelector('iframe');
+    // Only our confirmation page, loaded inside this exact signup iframe,
+    // may report success. Brevo redirects there only after accepting the form.
+    if (!frame || event.source !== frame.contentWindow ||
+        (event.origin !== location.origin && event.origin !== 'https://babyguard.rs') ||
+        !event.data || event.data.type !== 'babyguard:newsletter-submitted' || submitted) return;
+    submitted = true;
+    window.clearTimeout(timer);
+    trigger.textContent = 'Prijava je poslata';
+    feedback.hidden = false;
+    if (dialog.open) dialog.close();
+  });
   function suppressed() {
     // Local previews must remain repeatable after closing and reloading.
     if (preview || liveTest) return false;
@@ -86,6 +108,7 @@
     } catch (_) { return false; }
   }
   function open() {
+    if (submitted) { feedback.hidden = false; return; }
     if (dialog.open) return;
     previousFocus = document.activeElement;
     var frame = content.querySelector('iframe');
@@ -107,7 +130,7 @@
   });
   trigger.addEventListener('click', open);
   function autoOpen() {
-    if (suppressed() || dialog.open) return;
+    if (submitted || suppressed() || dialog.open) return;
     if (document.hidden || document.querySelector('dialog[open], .modal.active') || document.activeElement.matches('input, textarea, select')) {
       timer = window.setTimeout(autoOpen, 1000);
       return;
