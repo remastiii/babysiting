@@ -18,9 +18,15 @@ test('disabled public signup stays off, including when local-only preview parame
   }
 });
 
-test('the published configuration enables the real form, including with preview parameters', () => {
+test('production signup remains disabled while CAPTCHA and delivery are unverified', () => {
+  const context = { window: {} };
+  vm.runInNewContext(config, context);
+  assert.equal(context.window.BABYGUARD_NEWSLETTER.enabled, false);
+});
+
+test('explicit activation renders the real form, including with preview parameters', () => {
   for (const search of ['', '?newsletter-preview=1', '?newsletter-preview=live']) {
-    assert.throws(() => boot({ search }), /UI reached/);
+    assert.throws(() => boot({ search, overrides: { enabled: true } }), /UI reached/);
   }
 });
 test('activation rejects insecure, unrelated and credential-bearing embed URLs', () => {
